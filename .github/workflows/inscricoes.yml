@@ -1,0 +1,25 @@
+name: Processar inscrições
+on:
+  schedule: [{cron: "*/20 * * * *"}]
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency: inscricoes
+jobs:
+  processar:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: "3.12"}
+      - run: pip install msoffcrypto-tool openpyxl cryptography
+      - run: python scripts/process.py
+        env:
+          NTFY_TOPIC: ${{ secrets.NTFY_TOPIC }}
+          RSA_PRIVATE_KEY: ${{ secrets.RSA_PRIVATE_KEY }}
+          XLSX_PASSWORD: ${{ secrets.XLSX_PASSWORD }}
+      - name: Guardar Excel
+        run: |
+          git config user.name "inscricoes-bot"; git config user.email "bot@users.noreply.github.com"
+          git add inscricoes.xlsx
+          git diff --cached --quiet || (git commit -m "Atualizar inscrições" && git push)
