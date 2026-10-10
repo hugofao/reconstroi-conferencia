@@ -180,12 +180,12 @@ $("f").addEventListener("submit",async e=>{
     const id=Array.from(crypto.getRandomValues(new Uint8Array(5)),x=>x.toString(16).padStart(2,"0")).join("");
     const data={id,ts:Date.now()};
     ["name","email","phone","age","church","notes"].forEach(k=>data[k]=$(k).value.trim());data.sunday=$("sunday").checked?"Sim":"Não";
-    const sealed=await seal(data);let ok=false;
-    if(WORKER&&!WORKER.startsWith("__")){try{ok=(await fetch(WORKER,{method:"POST",body:sealed})).ok}catch(_){}}
-    if(!ok){ok=(await fetch("https://ntfy.sh/"+TOPIC,{method:"POST",body:sealed})).ok}
+    const sealed=await seal(data);let ok=false;window.__via="";
+    if(WORKER&&!WORKER.startsWith("__")){try{const w=await fetch(WORKER,{method:"POST",body:sealed});window.__via="w"+w.status+":"+(await w.text()).slice(0,20);ok=w.ok}catch(e){window.__via="w-erro:"+e.message}}
+    if(!ok){ok=(await fetch("https://ntfy.sh/"+TOPIC,{method:"POST",body:sealed})).ok;window.__via+=" |ntfy"}
     if(!ok) throw 0;
     $("f").reset();
-    show("Inscrição recebida! Referência "+id.toUpperCase()+". Até 28 de Novembro. 🧱","ok");
+    show("Inscrição recebida! Referência "+id.toUpperCase()+". Até 28 de Novembro. 🧱 ["+window.__via+"]","ok");
   }catch(_){show("Não foi possível enviar. Tenta novamente dentro de instantes.","err")}
   btn.disabled=false;btn.textContent="Confirmar inscrição";
 });
