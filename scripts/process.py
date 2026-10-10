@@ -6,7 +6,7 @@ from cryptography.hazmat.primitives.asymmetric import padding
 from cryptography.hazmat.primitives.ciphers.aead import AESGCM
 
 XLSX = "inscricoes.xlsx"
-HEAD = ["Ref", "Data/hora (UTC)", "Nome", "Email", "Telemóvel", "Idade", "Igreja / comunidade", "Domingo (culto)", "Observações"]
+HEAD = ["Ref", "Data/hora (UTC)", "Nome", "Email", "Telemóvel", "Faixa etária", "Igreja / comunidade", "Domingo (culto)", "Observações"]
 KEYS = ["name", "email", "phone", "age", "church", "sunday", "notes"]
 
 def decrypt(msg, priv):
@@ -36,7 +36,7 @@ def save(wb, pw):
 def main(messages):
     pw = os.environ["XLSX_PASSWORD"]
     priv = serialization.load_pem_private_key(os.environ["RSA_PRIVATE_KEY"].encode(), None)
-    wb = load(pw); ws = wb.active
+    wb = load(pw); ws = wb.active; ws["F1"] = "Faixa etária"
     seen = {r[0] for r in ws.iter_rows(min_row=2, values_only=True)}
     added = 0
     for m in messages:
