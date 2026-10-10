@@ -62,3 +62,4 @@ if __name__ == "__main__":
             j = json.loads(line)
             if j.get("event") == "message": msgs.append(j["message"])
     main(msgs)
+# processar pendentes
