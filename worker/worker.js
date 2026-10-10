@@ -1,8 +1,9 @@
 // Cloudflare Worker: recebe a inscrição (já cifrada no browser), guarda-a no relay (ntfy)
 // e "acorda" o GitHub Action para a processar de imediato.
-// Variáveis (Settings → Variables and Secrets): GH_TOKEN (secret), NTFY_TOPIC (secret)
+// Variável necessária: GH_TOKEN (secret)
 const REPO = "hugofao/reconstroi-conferencia";
 const ORIGIN = "https://hugofao.github.io";
+const NTFY_TOPIC = "reconstroi-b9eaf7b17932dcd721ba53a6"; // já é público no site
 
 const cors = { "Access-Control-Allow-Origin": ORIGIN, "Access-Control-Allow-Methods": "POST, OPTIONS", "Access-Control-Allow-Headers": "Content-Type" };
 
@@ -13,7 +14,7 @@ export default {
     const body = (await req.text()).trim();
     if (body.length < 100 || body.length > 6000 || !/^[A-Za-z0-9+/=]+$/.test(body)) return new Response("bad", { status: 400, headers: cors });
 
-    const r = await fetch("https://ntfy.sh/" + env.NTFY_TOPIC, { method: "POST", body });
+    const r = await fetch("https://ntfy.sh/" + NTFY_TOPIC, { method: "POST", body });
     if (!r.ok) return new Response("relay", { status: 502, headers: cors });
 
     // acordar o processamento (se falhar, o agendamento apanha-a na mesma)
