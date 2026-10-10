@@ -9,14 +9,6 @@ const cors = { "Access-Control-Allow-Origin": ORIGIN, "Access-Control-Allow-Meth
 
 export default {
   async fetch(req, env) {
-    if (req.method === "GET" && new URL(req.url).pathname === "/diag") { // temporário: diagnóstico
-      let st = "sem GH_TOKEN";
-      if (env.GH_TOKEN) {
-        const g = await fetch(`https://api.github.com/repos/${REPO}/dispatches`, { method: "POST", headers: { Authorization: "Bearer " + env.GH_TOKEN, Accept: "application/vnd.github+json", "User-Agent": "reconstroi-worker", "Content-Type": "application/json" }, body: JSON.stringify({ event_type: "inscricao" }) });
-        st = "GitHub respondeu " + g.status;
-      }
-      return new Response(st, { status: 200 });
-    }
     if (req.method === "OPTIONS") return new Response(null, { status: 204, headers: cors });
     if (req.method !== "POST" || req.headers.get("Origin") !== ORIGIN) return new Response("no", { status: 403, headers: cors });
     const body = (await req.text()).trim();
@@ -34,4 +26,3 @@ export default {
     return new Response("ok", { status: 200, headers: cors });
   },
 };
-// build 22:34
