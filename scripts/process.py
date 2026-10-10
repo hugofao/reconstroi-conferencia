@@ -38,7 +38,7 @@ def main(messages):
     priv = serialization.load_pem_private_key(os.environ["RSA_PRIVATE_KEY"].encode(), None)
     wb = load(pw); ws = wb.active; ws["F1"] = "Faixa etária"
     seen = {r[0] for r in ws.iter_rows(min_row=2, values_only=True)}
-    added = 0
+    added = 0; errors = 0
     for m in messages:
         try:
             d = decrypt(m, priv)
@@ -46,10 +46,11 @@ def main(messages):
             if ref in seen or not str(d.get("name", "")).strip(): continue
             ts = datetime.datetime.utcfromtimestamp(int(d["ts"]) / 1000).strftime("%Y-%m-%d %H:%M")
             ws.append([ref, ts] + [clean(d.get(k)) for k in KEYS]); seen.add(ref); added += 1
-        except Exception:
-            continue  # lixo / spam / não cifrado para nós
+        except Exception as e:
+            errors += 1; print('mensagem ignorada:', type(e).__name__); continue
     if added or not os.path.exists(XLSX): save(wb, pw)
-    print(f"novas inscrições: {added}")
+    print(f"mensagens: {len(messages)} | novas inscrições: {added} | ignoradas: {errors}")
+    if messages and errors == len(messages): sys.exit(1)  # só lixo/chave errada: falhar visivelmente
 
 if __name__ == "__main__":
     if len(sys.argv) > 1:  # modo teste: ficheiro com uma mensagem por linha

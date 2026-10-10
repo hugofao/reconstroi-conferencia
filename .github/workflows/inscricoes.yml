@@ -1,7 +1,9 @@
 name: Processar inscrições
 on:
-  schedule: [{cron: "*/20 * * * *"}]
+  schedule: [{cron: "*/10 * * * *"}]
   workflow_dispatch:
+  push:
+    paths: ["scripts/**", ".github/workflows/**"]
 permissions:
   contents: write
 concurrency: inscricoes
