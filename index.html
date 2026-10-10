@@ -139,6 +139,7 @@ footer a{color:var(--mut)}
 <footer><div class="w">[RE]Constrói · Conferência de Homens · AD Benfica · 2026<br><a href="inscricoes.xlsx">Lista de inscrições (organização · Excel protegido por password)</a></div></footer>
 
 <script>
+const WORKER="";
 const PUB={"kty": "RSA", "alg": "RSA-OAEP-256", "e": "AQAB", "n": "mKsqgT-U1ap5HX9Ad6EZGSXUHMTxbVD72sUxKoFwNqNPVsQDzX_bu4t9sUmOmSiSSrcqVTZo3uYGslIPgnRgl1T9Gmt_kuF7AoT56itm_xNb4V90coCoOECm5Xk9WKxgEXWZvLTxDSF_cGFpqmhNlaa9Cz_LCyzMBTRqWVD0qgM6xYBTZZv05qg1QB1dGMUWnRYS0x3sNzmRnzxi9roQoJZRI0cq0E-pzY5R6QXs-Um4fwZDLM2ahkNXpZcClvxO1kib7C8A-D4J84pKyL0j2UZ5SJLUZd3MH2jjdYTG_PmHHTxSzJf4DkJAQAGVhMZjItFFD-JFw1ELF0EocCiuyQ", "ext": true}, TOPIC="reconstroi-b9eaf7b17932dcd721ba53a6";
 const $=id=>document.getElementById(id), b64=u=>btoa(String.fromCharCode(...new Uint8Array(u)));
 async function seal(obj){
@@ -160,8 +161,10 @@ $("f").addEventListener("submit",async e=>{
     const id=Array.from(crypto.getRandomValues(new Uint8Array(5)),x=>x.toString(16).padStart(2,"0")).join("");
     const data={id,ts:Date.now()};
     ["name","email","phone","age","church","notes"].forEach(k=>data[k]=$(k).value.trim());data.sunday=$("sunday").checked?"Sim":"Não";
-    const r=await fetch("https://ntfy.sh/"+TOPIC,{method:"POST",body:await seal(data)});
-    if(!r.ok) throw 0;
+    const sealed=await seal(data);let ok=false;
+    if(WORKER&&!WORKER.startsWith("__")){try{ok=(await fetch(WORKER,{method:"POST",body:sealed})).ok}catch(_){}}
+    if(!ok){ok=(await fetch("https://ntfy.sh/"+TOPIC,{method:"POST",body:sealed})).ok}
+    if(!ok) throw 0;
     $("f").reset();
     show("Inscrição recebida! Referência "+id.toUpperCase()+". Até 28 de Novembro. 🧱","ok");
   }catch(_){show("Não foi possível enviar. Tenta novamente dentro de instantes.","err")}
