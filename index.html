@@ -51,6 +51,10 @@ input:focus,select:focus,textarea:focus{outline:2px solid var(--or);border-color
 #msg{margin-top:16px;padding:14px;border-radius:8px;display:none}
 #msg.ok{display:block;background:#1f3a22;border:1px solid #3f7a45}#msg.err{display:block;background:#4a1f1a;border:1px solid #a24a40}
 blockquote{margin:0 0 30px;padding:18px 24px;border-left:3px solid var(--or);background:var(--bg2);font-size:20px;font-style:italic;max-width:680px}blockquote cite{display:block;margin-top:6px;font-size:14px;font-style:normal;color:var(--or2)}
+.tabs{display:flex;gap:8px;margin:18px 0 6px;flex-wrap:wrap}
+.tab{background:var(--card);color:var(--tx);border:1px solid var(--ln);border-radius:999px;padding:11px 22px;font:700 15px Montserrat,sans-serif;cursor:pointer}
+.tab.on{background:var(--or);border-color:var(--or);color:#fff}
+.panel[hidden]{display:none}
 footer{padding:36px 0;border-top:1px solid var(--ln);color:var(--mut);font-size:14px;text-align:center}
 footer a{color:var(--mut)}
 </style>
@@ -86,7 +90,11 @@ footer a{color:var(--mut)}
 
 <section id="programa"><div class="w">
   <h2>Programa</h2>
-
+  <div class="tabs" role="tablist" aria-label="Dias do programa">
+    <button class="tab on" role="tab" id="t-sab" aria-selected="true" aria-controls="p-sab" type="button">Sábado · 28 Nov</button>
+    <button class="tab" role="tab" id="t-dom" aria-selected="false" aria-controls="p-dom" type="button">Domingo · 29 Nov</button>
+  </div>
+  <div class="panel" id="p-sab" role="tabpanel" aria-labelledby="t-sab">
   <div class="day">Sábado, 28 de Novembro — Manhã<small>Convidado especial: Dr. Samuel Antunes (Psicólogo Clínico)</small></div>
   <ul class="tl">
     <li><time>09:30 – 10:00</time><h4>Abertura e Check-in</h4><p>Boas-vindas e dinâmica de quebra-gelo das porcas e parafusos para misturar as gerações nas mesas.</p></li>
@@ -107,10 +115,13 @@ footer a{color:var(--mut)}
     <li><time>16:45 – 17:00</time><h4>Encerramento e envio para o Domingo</h4><p>Agradecimentos finais e indicações para o culto geral com a igreja.</p></li>
   </ul>
 
+  </div>
+  <div class="panel" id="p-dom" role="tabpanel" aria-labelledby="t-dom" hidden>
   <div class="day">Domingo, 29 de Novembro — Celebração com a Igreja</div>
   <ul class="tl">
     <li><time>Horário do culto</time><h4>Celebração Geral [re]constrói</h4><p>Momento alto com toda a comunidade, integrando a família no processo de cura e restauração dos homens. Exposição em Isaías 61:3-4, oração comunitária pelos homens e apresentação visual da estrutura construída no sábado.</p></li>
   </ul>
+  </div>
 </div></section>
 
 <section id="inscricao"><div class="w">
@@ -138,6 +149,11 @@ footer a{color:var(--mut)}
 
 <footer><div class="w">[RE]Constrói · Conferência de Homens · AD Benfica · 2026<br><a href="inscricoes.xlsx">Lista de inscrições (organização · Excel protegido por password)</a></div></footer>
 
+<script>
+document.querySelectorAll(".tab").forEach(t=>t.addEventListener("click",()=>{
+  document.querySelectorAll(".tab").forEach(x=>{const on=x===t;x.classList.toggle("on",on);x.setAttribute("aria-selected",on);document.getElementById(x.getAttribute("aria-controls")).hidden=!on});
+}));
+</script>
 <script>
 const WORKER="https://reconstroi-conferencia.hugofao.workers.dev/";
 const PUB={"kty": "RSA", "alg": "RSA-OAEP-256", "e": "AQAB", "n": "mKsqgT-U1ap5HX9Ad6EZGSXUHMTxbVD72sUxKoFwNqNPVsQDzX_bu4t9sUmOmSiSSrcqVTZo3uYGslIPgnRgl1T9Gmt_kuF7AoT56itm_xNb4V90coCoOECm5Xk9WKxgEXWZvLTxDSF_cGFpqmhNlaa9Cz_LCyzMBTRqWVD0qgM6xYBTZZv05qg1QB1dGMUWnRYS0x3sNzmRnzxi9roQoJZRI0cq0E-pzY5R6QXs-Um4fwZDLM2ahkNXpZcClvxO1kib7C8A-D4J84pKyL0j2UZ5SJLUZd3MH2jjdYTG_PmHHTxSzJf4DkJAQAGVhMZjItFFD-JFw1ELF0EocCiuyQ", "ext": true}, TOPIC="reconstroi-b9eaf7b17932dcd721ba53a6";
