@@ -63,3 +63,4 @@ if __name__ == "__main__":
             if j.get("event") == "message": msgs.append(j["message"])
     main(msgs)
 # processar pendentes
+# reprocessar
