@@ -6,8 +6,8 @@ from cryptography.hazmat.primitives.asymmetric import padding
 from cryptography.hazmat.primitives.ciphers.aead import AESGCM
 
 XLSX = "inscricoes.xlsx"
-HEAD = ["Ref", "Data/hora (UTC)", "Nome", "Email", "Telemóvel", "Faixa etária", "Igreja / comunidade", "Domingo (culto)", "Observações"]
-KEYS = ["name", "email", "phone", "age", "church", "sunday", "notes"]
+HEAD = ["Ref", "Data/hora (UTC)", "Nome", "Email", "Telemóvel", "Faixa etária", "Igreja / comunidade", "Domingo (culto)", "Observações", "Almoço"]
+KEYS = ["name", "email", "phone", "age", "church", "sunday", "notes", "lunch"]
 
 def decrypt(msg, priv):
     env = json.loads(base64.b64decode(msg))
@@ -26,7 +26,7 @@ def load(pw):
 
 def save(wb, pw):
     ws = wb.active
-    for col, w in zip("ABCDEFGHI", [10, 20, 30, 30, 16, 8, 26, 16, 40]): ws.column_dimensions[col].width = w
+    for col, w in zip("ABCDEFGHIJ", [10, 20, 30, 30, 16, 12, 26, 16, 40, 10]): ws.column_dimensions[col].width = w
     for c in ws[1]: c.font = openpyxl.styles.Font(bold=True)
     ws.freeze_panes = "A2"
     b = io.BytesIO(); wb.save(b); b.seek(0)
@@ -36,7 +36,7 @@ def save(wb, pw):
 def main(messages):
     pw = os.environ["XLSX_PASSWORD"]
     priv = serialization.load_pem_private_key(os.environ["RSA_PRIVATE_KEY"].encode(), None)
-    wb = load(pw); ws = wb.active; ws["F1"] = "Faixa etária"
+    wb = load(pw); ws = wb.active; ws["F1"] = "Faixa etária"; ws["J1"] = "Almoço"; ws["J1"].font = openpyxl.styles.Font(bold=True)
     seen = {r[0] for r in ws.iter_rows(min_row=2, values_only=True)}
     added = 0; errors = 0
     for m in messages:

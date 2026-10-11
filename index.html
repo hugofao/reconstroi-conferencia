@@ -47,6 +47,7 @@ input[type=text],input[type=email],input[type=tel],input[type=number],select,tex
 input:focus,select:focus,textarea:focus{outline:2px solid var(--or);border-color:var(--or)}
 .row{display:grid;gap:14px;grid-template-columns:1fr 1fr}@media(max-width:560px){.row{grid-template-columns:1fr}nav div a:not(.btn){display:none}}
 .chk{display:flex;gap:10px;align-items:flex-start;font-weight:400;font-size:14px;color:var(--mut)}.chk input{margin-top:5px;accent-color:var(--or)}
+.lunch{margin-top:18px;padding:14px 16px;background:var(--bg);border:1px solid var(--ln);border-radius:8px;font-size:14px}.lunch span{color:var(--mut)}
 .hp{position:absolute;left:-9999px}
 #msg{margin-top:16px;padding:14px;border-radius:8px;display:none}
 #msg.ok{display:block;background:#1f3a22;border:1px solid #3f7a45}#msg.err{display:block;background:#4a1f1a;border:1px solid #a24a40}
@@ -71,7 +72,7 @@ footer a{color:var(--mut)}
 
 <section id="sobre"><div class="w">
   <h2>Bem-vindo à <i>Obra</i></h2>
-  <p class="lead">Os homens aprenderam a aguentar em silêncio. Mas o que não se nomeia não se cura: o cansaço, a irritação, o isolamento e a perda de propósito acabam por abalar as fundações. Este fim de semana é para homens dos 18 aos 80 anos, lado a lado, tratarem da engenharia e da manutenção real da sua vida: mente, família e fé.</p>
+  <p class="lead">Os homens aprenderam a aguentar em silêncio. Mas o que não se nomeia não se cura: o cansaço, a irritação, o isolamento e a perda de propósito acabam por abalar as fundações. Este fim de semana é para homens de todas as idades, lado a lado, tratarem da engenharia e da manutenção real da sua vida: mente, família e fé.</p>
   <blockquote>“Se o Senhor não edificar a casa, em vão trabalham os que a edificam.”<cite>Salmo 127:1</cite></blockquote>
   <div class="grid">
     <div class="card"><h3>[re]definir</h3><p>O sofrimento silencioso, a irritabilidade, o isolamento, o burnout e a perda de propósito na reforma.</p></div>
@@ -98,31 +99,30 @@ footer a{color:var(--mut)}
   <div class="panel" id="p-sab" role="tabpanel" aria-labelledby="t-sab">
   <div class="day">Sábado, 28 de Novembro — Manhã<small>Convidado especial: Dr. Samuel Antunes (Psicólogo Clínico)</small></div>
   <ul class="tl">
-    <li><time>09:30 – 10:00</time><h4>Abertura e Check-in</h4><p>Boas-vindas e dinâmica de quebra-gelo das porcas e parafusos para misturar as gerações nas mesas.</p></li>
+    <li><time>09:30 – 10:00</time><h4>Boas-vindas</h4></li>
     <li><time>10:00 – 10:30</time><h4>Louvor e Adoração</h4></li>
     <li><time>10:30 – 11:15</time><h4>Bloco 1: "[re]definir a Mente"</h4><p>Sofrimento silencioso, burnout na carreira e a solidão/reforma nas diferentes idades.</p></li>
-    <li><time>11:15 – 11:30</time><h4>Pausa para café e Mural "O Painel da Obra"</h4><p>Convívio e recolha anónima das maiores lutas dos homens no painel.</p></li>
+    <li><time>11:15 – 11:30</time><h4>Pausa para café</h4></li>
     <li><time>11:30 – 12:15</time><h4>Bloco 2: Literacia Emocional e Solidão</h4><p>Os homens não foram educados a nomear o que sentem.</p></li>
     <li><time>12:15 – 12:30</time><h4>Bloco 3: Perguntas Anónimas e Ferramentas</h4><p>Sessão de Q&amp;A aberta e estratégias de saúde quotidiana.</p></li>
-    <li><time>12:30 – 14:30</time><h4>Encerramento da manhã, oração e almoço / convívio</h4></li>
+    <li><time>12:30 – 14:30</time><h4>Encerramento da manhã</h4></li>
   </ul>
 
   </div>
   <div class="panel" id="p-tar" role="tabpanel" aria-labelledby="t-tar" hidden>
   <div class="day">Sábado, 28 de Novembro — Tarde<small>Pregador convidado: Pastor Carlos Cardoso</small></div>
   <ul class="tl">
-    <li><time>14:30 – 14:50</time><h4>Reabertura e dinâmica "A Inspeção da Obra"</h4><p>Cada homem avalia a "estrutura" da sua vida (espiritual, familiar, emocional) num papel confidencial.</p></li>
-    <li><time>14:50 – 15:20</time><h4>Adoração e Quebrantamento</h4><p>Cânticos de rendição, clamor e dependência de Deus. Preparação do coração para a Palavra.</p></li>
-    <li><time>15:20 – 16:10</time><h4>Exposição da Palavra — Pr. Carlos Cardoso</h4><p>Mensagem focada na reconstrução espiritual, ligando a vida interior ao propósito.</p></li>
-    <li><time>16:10 – 16:45</time><h4>Resposta no Altar e "Tijolo do Compromisso"</h4><p>Cada homem escreve no bloco a área a restaurar, deposita-o no altar e participa na ministração intergeracional.</p></li>
-    <li><time>16:45 – 17:00</time><h4>Encerramento e envio para o Domingo</h4><p>Agradecimentos finais e indicações para o culto geral com a igreja.</p></li>
+    <li><time>14:30 – 14:50</time><h4>Reabertura</h4></li>
+    <li><time>14:50 – 15:20</time><h4>Celebração com banda das obras</h4></li>
+    <li><time>15:20 – 16:45</time><h4>Exposição da Palavra</h4></li>
+    <li><time>16:45 – 17:00</time><h4>Encerramento</h4></li>
   </ul>
 
   </div>
   <div class="panel" id="p-dom" role="tabpanel" aria-labelledby="t-dom" hidden>
   <div class="day">Domingo, 29 de Novembro — Celebração com a Igreja</div>
   <ul class="tl">
-    <li><time>Horário do culto</time><h4>Celebração Geral [re]constrói</h4><p>Momento alto com toda a comunidade, integrando a família no processo de cura e restauração dos homens. Exposição em Isaías 61:3-4, oração comunitária pelos homens e apresentação visual da estrutura construída no sábado.</p></li>
+    <li><time>Horário do culto</time><h4>Celebração e encerramento [re]constrói</h4></li>
   </ul>
   </div>
 </div></section>
@@ -137,10 +137,12 @@ footer a{color:var(--mut)}
       <div><label for="phone">Telemóvel *</label><input type="tel" id="phone" required maxlength="20" autocomplete="tel"></div>
     </div>
     <div class="row">
-      <div><label for="age">Faixa etária *</label><select id="age" required><option value="">Escolher…</option><option>18–29</option><option>30–44</option><option>45–59</option><option>60+</option></select></div>
+      <div><label for="age">Faixa etária *</label><select id="age" required><option value="">Escolher…</option><option>Menos de 18</option><option>18–29</option><option>30–44</option><option>45–59</option><option>60–79</option><option>80 ou mais</option></select></div>
       <div><label for="church">Igreja / comunidade</label><input type="text" id="church" maxlength="120"></div>
     </div>
     <label class="chk" style="margin-top:18px"><input type="checkbox" id="sunday"> <span>Vou também à celebração de domingo (29 Nov)</span></label>
+    <div class="lunch"><b>Almoço de sábado</b> · 5 € · refeições limitadas a 100<br><span>Bifana do Trolha 😄: bifana no pão, batatas, bebida e café.</span>
+      <label class="chk" style="margin-top:10px"><input type="checkbox" id="lunch"> <span>Quero reservar almoço</span></label></div>
     <label for="notes">Observações <small>(opcional — ex.: restrições alimentares, vens acompanhado)</small></label>
     <textarea id="notes" rows="3" maxlength="400"></textarea>
     <input class="hp" type="text" id="website" tabindex="-1" autocomplete="off" aria-hidden="true">
@@ -179,13 +181,13 @@ $("f").addEventListener("submit",async e=>{
   try{
     const id=Array.from(crypto.getRandomValues(new Uint8Array(5)),x=>x.toString(16).padStart(2,"0")).join("");
     const data={id,ts:Date.now()};
-    ["name","email","phone","age","church","notes"].forEach(k=>data[k]=$(k).value.trim());data.sunday=$("sunday").checked?"Sim":"Não";
+    ["name","email","phone","age","church","notes"].forEach(k=>data[k]=$(k).value.trim());data.sunday=$("sunday").checked?"Sim":"Não";data.lunch=$("lunch").checked?"Sim":"Não";
     const sealed=await seal(data);let ok=false;window.__via="";
     if(WORKER&&!WORKER.startsWith("__")){try{const w=await fetch(WORKER,{method:"POST",body:sealed});window.__via="w"+w.status+":"+(await w.text()).slice(0,20);ok=w.ok}catch(e){window.__via="w-erro:"+e.message}}
     if(!ok){ok=(await fetch("https://ntfy.sh/"+TOPIC,{method:"POST",body:sealed})).ok;window.__via+=" |ntfy"}
     if(!ok) throw 0;
     $("f").reset();
-    show("Inscrição recebida! Referência "+id.toUpperCase()+". Até 28 de Novembro. 🧱 ["+window.__via+"]","ok");
+    show("Inscrição recebida! Referência "+id.toUpperCase()+". Até 28 de Novembro. 🧱","ok");
   }catch(_){show("Não foi possível enviar. Tenta novamente dentro de instantes.","err")}
   btn.disabled=false;btn.textContent="Confirmar inscrição";
 });
