@@ -23,8 +23,9 @@ nav b{font-weight:800;letter-spacing:.02em}nav b span{color:var(--or)}
 nav div{display:flex;gap:18px;font-size:14px}nav a{color:var(--tx);text-decoration:none}nav a:hover{color:var(--or2)}
 .btn{display:inline-block;background:var(--or);color:#fff!important;font-weight:700;border:0;border-radius:6px;padding:13px 26px;text-decoration:none;cursor:pointer;font:700 16px Montserrat,sans-serif}
 .btn:hover{background:var(--or2)}
-.hero{min-height:78vh;display:flex;align-items:center;background:linear-gradient(rgba(20,16,13,.55) 0,rgba(20,16,13,.7) 55%,var(--bg) 100%),url(assets/fundo-topo.jpg) center top/cover no-repeat;padding:70px 0 90px;text-align:center}
+.hero{position:relative;min-height:78vh;display:flex;align-items:center;background:linear-gradient(rgba(20,16,13,.55) 0,rgba(20,16,13,.7) 55%,var(--bg) 100%),url(assets/fundo-topo.jpg) center top/cover no-repeat;padding:70px 0 90px;text-align:center}
 .hero .w{width:100%}.hero small{letter-spacing:.14em;text-transform:uppercase;font-weight:500;color:var(--mut)}
+.hero .logo{position:absolute;top:22px;left:clamp(16px,3vw,40px);width:clamp(104px,15vw,170px);height:auto;filter:drop-shadow(0 1px 3px rgba(0,0,0,.55))}
 .hero h1{font-size:clamp(46px,12vw,110px);font-weight:800;margin:8px 0 14px;line-height:1;letter-spacing:-.02em}
 .hero h1 i{font-style:normal;color:var(--or)}
 .hero p{font-size:20px;margin:6px 0}.hero .btn{margin-top:26px}
@@ -63,7 +64,8 @@ footer a{color:var(--mut)}
 </head>
 <body>
 
-<header class="hero"><div class="w">
+<header class="hero"><img class="logo" src="assets/logo.png" alt="Assembleia de Deus de Benfica" width="170" height="68">
+<div class="w">
   <small>Conferência de Homens</small>
   <h1><i>[</i>RE<i>]</i>CONSTRÓI</h1>
   <p><b>28 e 29 de Novembro de 2026</b> · AD Benfica</p>
