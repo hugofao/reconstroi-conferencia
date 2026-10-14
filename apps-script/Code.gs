@@ -8,13 +8,32 @@ function limpar(v) {
   return /^[=+\-@]/.test(v) ? "'" + v : v; // evita fórmulas maliciosas
 }
 
+// Devolve a folha a que o script está ligado (criado via Extensões → Apps Script, dentro da folha).
+function folha() {
+  const ss = SpreadsheetApp.getActiveSpreadsheet();
+  if (!ss) throw new Error("Este script não está ligado a nenhuma folha. Abre a folha Google e usa Extensões → Apps Script.");
+  return ss;
+}
+
+// Corre isto no editor (menu de funções → "ondeEscreve" → Executar) para ver o link da folha.
+function ondeEscreve() {
+  const ss = folha();
+  Logger.log("Folha: " + ss.getName() + "\nLink: " + ss.getUrl() + "\nSeparador: " + ABA);
+}
+
+// Corre isto no editor (→ "testar" → Executar): pede autorização e escreve uma linha de teste.
+function testar() {
+  const r = doPost({ postData: { contents: JSON.stringify({ id: "TESTE" + Date.now(), name: "Teste do editor", email: "teste@exemplo.pt", phone: "", age: "40", church: "", notes: "", sunday: "Não", lunch: "Não" }) } });
+  Logger.log("Resultado: " + r.getContent() + "\nLink da folha: " + folha().getUrl());
+}
+
 function doPost(e) {
   const lock = LockService.getScriptLock();
   lock.waitLock(20000);
   try {
     const d = JSON.parse(e.postData.contents);
     if (d.website || !String(d.name || "").trim()) return ContentService.createTextOutput("ignorado");
-    const ss = SpreadsheetApp.getActiveSpreadsheet();
+    const ss = folha();
     const sh = ss.getSheetByName(ABA) || ss.insertSheet(ABA);
     if (sh.getLastRow() === 0) {
       sh.appendRow(CABECALHO);
