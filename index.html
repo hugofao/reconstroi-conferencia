@@ -47,7 +47,7 @@ input[type=text],input[type=email],input[type=tel],input[type=number],select,tex
 input:focus,select:focus,textarea:focus{outline:2px solid var(--or);border-color:var(--or)}
 .row{display:grid;gap:14px;grid-template-columns:1fr 1fr}@media(max-width:560px){.row{grid-template-columns:1fr}nav div a:not(.btn){display:none}}
 .chk{display:flex;gap:10px;align-items:flex-start;font-weight:400;font-size:14px;color:var(--mut)}.chk input{margin-top:5px;accent-color:var(--or)}
-.lunch{margin-top:18px;padding:14px 16px;background:var(--bg);border:1px solid var(--ln);border-radius:8px;font-size:14px}.lunch span{color:var(--mut)}
+.lunch{margin-top:22px}.lunch h3{margin:0 0 4px;font-size:17px}.lunch p{margin:2px 0;font-size:15px;color:var(--mut)}
 .hp{position:absolute;left:-9999px}
 #msg{margin-top:16px;padding:14px;border-radius:8px;display:none}
 #msg.ok{display:block;background:#1f3a22;border:1px solid #3f7a45}#msg.err{display:block;background:#4a1f1a;border:1px solid #a24a40}
@@ -141,7 +141,9 @@ footer a{color:var(--mut)}
       <div><label for="church">Igreja / comunidade</label><input type="text" id="church" maxlength="120"></div>
     </div>
     <label class="chk" style="margin-top:18px"><input type="checkbox" id="sunday"> <span>Vou também à celebração de domingo (29 Nov)</span></label>
-    <div class="lunch"><b>Almoço de sábado</b> · 5 € · refeições limitadas a 100<br><span>Bifana do Trolha 😄: bifana no pão, batatas, bebida e café.</span>
+    <div class="lunch"><h3>Almoço de sábado</h3>
+      <p>Custo 5 € (refeições limitadas até 100)</p>
+      <p>"Bifana do Trolha" (bifana no pão, batatas, bebida e café.)</p>
       <label class="chk" style="margin-top:10px"><input type="checkbox" id="lunch"> <span>Quero reservar almoço</span></label></div>
     <label for="notes">Observações <small>(opcional — ex.: restrições alimentares, vens acompanhado)</small></label>
     <textarea id="notes" rows="3" maxlength="400"></textarea>
