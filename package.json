@@ -1,0 +1,9 @@
+{
+  "name": "reconstroi-conferencia",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Worker de apoio ao site da conferência [re]constrói",
+  "dependencies": {
+    "worker-mailer": "1.2.1"
+  }
+}

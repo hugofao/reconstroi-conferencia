@@ -1,6 +1,8 @@
 /** @OnlyCurrentDoc */
 // Recebe as inscrições do site e escreve-as na folha de cálculo (uma linha por inscrição).
 const ABA = "Inscrições";
+const WORKER_EMAIL = "https://reconstroi-conferencia.hugofao.workers.dev/email";
+const LIMITE_EMAILS_DIA = 300;
 const CABECALHO = ["Ref", "Data/hora (Lisboa)", "Nome", "Email", "Telemóvel", "Faixa etária", "Igreja / comunidade", "Domingo (culto)", "Almoço", "Observações"];
 
 function limpar(v) {
@@ -111,26 +113,31 @@ function enviarEmail(ref, d) {
     '<p style="margin-top:18px"><b>Até 28 de Novembro!</b><br>Equipa [re]constrói · AD Benfica</p>' +
     '</div></div>';
 
-  // Envio via Brevo (API). A chave e o remetente ficam em Definições do projeto → Propriedades do script:
-//   BREVO_KEY    = chave da API (começa por "xkeysib-")
-//   BREVO_SENDER = email remetente validado no Brevo
+  // Envio por SMTP através do Cloudflare Worker (rota /email). Propriedade do script necessária
+  // (Definições do projeto → Propriedades do script):  EMAIL_SECRET = o mesmo valor do secret do Worker
   const props = PropertiesService.getScriptProperties();
-  const chave = props.getProperty("BREVO_KEY"), remetente = props.getProperty("BREVO_SENDER");
-  if (!chave || !remetente) throw new Error("Falta BREVO_KEY ou BREVO_SENDER nas propriedades do script.");
-  const resp = UrlFetchApp.fetch("https://api.brevo.com/v3/smtp/email", {
+  const segredo = props.getProperty("EMAIL_SECRET");
+  if (!segredo) throw new Error("Falta EMAIL_SECRET nas propriedades do script.");
+  // limite diário de segurança contra abuso do formulário
+  const hoje = Utilities.formatDate(new Date(), "Europe/Lisbon", "yyyyMMdd");
+  const [dia, n] = String(props.getProperty("EMAILS_DIA") || "").split(":");
+  const enviados = dia === hoje ? Number(n) : 0;
+  if (enviados >= LIMITE_EMAILS_DIA) throw new Error("Limite diário de emails atingido (" + LIMITE_EMAILS_DIA + ").");
+  const resp = UrlFetchApp.fetch(WORKER_EMAIL, {
     method: "post",
     contentType: "application/json",
-    headers: { "api-key": chave, accept: "application/json" },
+    headers: { "x-secret": segredo },
     muteHttpExceptions: true,
     payload: JSON.stringify({
-      sender: { name: "[re]constrói · AD Benfica", email: remetente },
-      to: [{ email: email, name: nome || email }],
+      to: email,
+      name: nome,
       subject: "[re]constrói · A tua inscrição está confirmada (Ref. " + ref + ")",
-      htmlContent: html,
-      textContent: texto,
+      html: html,
+      text: texto,
     }),
   });
-  if (resp.getResponseCode() >= 300) throw new Error("Brevo " + resp.getResponseCode() + ": " + resp.getContentText().slice(0, 300));
+  if (resp.getResponseCode() >= 300) throw new Error("Envio falhou " + resp.getResponseCode() + ": " + resp.getContentText().slice(0, 300));
+  props.setProperty("EMAILS_DIA", hoje + ":" + (enviados + 1));
 }
 
 // Corre no editor ("testarEmail" → Executar): envia um email de exemplo para a tua própria conta.

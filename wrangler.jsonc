@@ -2,6 +2,7 @@
   "name": "reconstroi-conferencia",
   "main": "worker/worker.js",
   "compatibility_date": "2025-10-01",
+  "compatibility_flags": ["nodejs_compat"],
   "workers_dev": true,
   "keep_vars": true
 }
