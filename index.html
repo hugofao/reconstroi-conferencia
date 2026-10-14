@@ -45,6 +45,7 @@ form{background:var(--card);border:1px solid var(--ln);border-radius:12px;paddin
 label{display:block;font-weight:600;font-size:14px;margin:16px 0 6px}label small{font-weight:400;color:var(--mut)}
 input[type=text],input[type=email],input[type=tel],input[type=number],select,textarea{width:100%;background:var(--bg);color:var(--tx);border:1px solid var(--ln);border-radius:6px;padding:12px;font:16px Montserrat,sans-serif}
 input:focus,select:focus,textarea:focus{outline:2px solid var(--or);border-color:var(--or)}
+input.bad,textarea.bad{border-color:#ff6b5a!important;box-shadow:0 0 0 2px rgba(255,107,90,.25)}
 .row{display:grid;gap:14px;grid-template-columns:1fr 1fr}@media(max-width:560px){.row{grid-template-columns:1fr}nav div a:not(.btn){display:none}}
 .chk{display:flex;gap:10px;align-items:flex-start;font-weight:400;font-size:14px;color:var(--mut)}.chk input{margin-top:5px;accent-color:var(--or)}
 .lunch{margin-top:22px}.lunch h3{margin:0 0 4px;font-size:17px}.lunch p{margin:2px 0;font-size:15px;color:var(--mut)}.lunch .pay{margin:6px 0 4px;padding-left:20px;font-size:15px;color:var(--mut)}.lunch .pay a{color:var(--or)}.lunch .note{margin-top:8px}
@@ -180,14 +181,22 @@ function show(t,c){const m=$("msg");m.textContent=t;m.className=c}
 $("f").addEventListener("submit",async e=>{
   e.preventDefault();
   if($("website").value) return;                       // honeypot
+  const erros=[]; // [campo, mensagem]
+  document.querySelectorAll(".bad").forEach(x=>x.classList.remove("bad"));
+  const nome=$("name").value.trim(), email=$("email").value.trim(), idade=$("age").value.trim();
   const tel=$("phone").value.replace(/\s+/g,"");$("phone").value=tel;
-  if(tel&&!/^9\d{8}$/.test(tel)){show("O telemóvel deve ter 9 dígitos e começar por 9 (ex.: 912345678).","err");$("phone").focus();return}
-  const falta=[];
-  if(!$("name").value.trim()) falta.push(["name","o nome"]);
-  if(!$("email").value.trim()||!$("email").checkValidity()) falta.push(["email","um email válido"]);
-  if(!/^\d{1,3}$/.test($("age").value.trim())) falta.push(["age","a idade (só números)"]);
-  if(!$("rgpd").checked) falta.push(["rgpd","a autorização de tratamento de dados (caixa no fim)"]);
-  if(falta.length){show("Falta preencher: "+falta.map(f=>f[1]).join("; ")+".","err");$(falta[0][0]).focus();return}
+  if(!nome) erros.push(["name","Nome: está vazio."]);
+  if(!email) erros.push(["email","Email: está vazio."]);
+  else if(!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)) erros.push(["email","Email: formato inválido (exemplo: nome@exemplo.pt)."]);
+  if(!idade) erros.push(["age","Idade: está vazia."]);
+  else if(!/^\d{1,3}$/.test(idade)) erros.push(["age","Idade: formato inválido, usa só números (exemplo: 35)."]);
+  if(tel&&!/^9\d{8}$/.test(tel)) erros.push(["phone","Telemóvel: formato inválido, deve ter 9 dígitos e começar por 9 (exemplo: 912345678)."]);
+  if(!$("rgpd").checked) erros.push(["rgpd","Autorização de dados: marca a caixa no fim do formulário."]);
+  if(erros.length){
+    erros.forEach(([id])=>{const el=$(id);(el.closest("div")||el).classList.add("bad");el.classList.add("bad")});
+    $("msg").innerHTML="";const ul=document.createElement("ul");ul.style.cssText="margin:0;padding-left:18px";
+    erros.forEach(([,m])=>{const li=document.createElement("li");li.textContent=m;ul.appendChild(li)});
+    $("msg").appendChild(ul);$("msg").className="err";$(erros[0][0]).focus();return}
   const btn=$("go");btn.disabled=true;btn.textContent="A enviar…";
   try{
     const id=Array.from(crypto.getRandomValues(new Uint8Array(5)),x=>x.toString(16).padStart(2,"0")).join("");
