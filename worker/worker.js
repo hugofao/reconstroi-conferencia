@@ -33,7 +33,7 @@ async function enviarEmail(req, env) {
 }
 
 export default {
-  async fetch(req, env) {
+  async fetch(req, env, ctx) {
     if (req.method === "POST" && new URL(req.url).pathname === "/email") return enviarEmail(req, env);
     if (req.method === "GET") return new Response(env.GH_TOKEN ? "token: sim" : "token: NAO", { status: 200 });
     if (req.method === "OPTIONS") return new Response(null, { status: 204, headers: cors });
@@ -44,12 +44,12 @@ export default {
     const r = await fetch("https://ntfy.sh/" + NTFY_TOPIC, { method: "POST", body });
     if (!r.ok) return new Response("relay", { status: 502, headers: cors });
 
-    // acordar o processamento (se falhar, o agendamento apanha-a na mesma)
-    const g = await fetch(`https://api.github.com/repos/${REPO}/dispatches`, {
+    // acordar o processamento em segundo plano, sem atrasar a resposta (se falhar, o agendamento apanha-a)
+    ctx.waitUntil(fetch(`https://api.github.com/repos/${REPO}/dispatches`, {
       method: "POST",
       headers: { Authorization: "Bearer " + env.GH_TOKEN, Accept: "application/vnd.github+json", "User-Agent": "reconstroi-worker", "Content-Type": "application/json" },
       body: JSON.stringify({ event_type: "inscricao" }),
-    });
-    return new Response("ok:" + g.status, { status: 200, headers: cors });
+    }).catch(() => {}));
+    return new Response("ok", { status: 200, headers: cors });
   },
 };

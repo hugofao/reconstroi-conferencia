@@ -191,15 +191,16 @@ $("f").addEventListener("submit",async e=>{
     ["name","email","phone","age","church","notes"].forEach(k=>data[k]=$(k).value.trim());data.sunday=$("sunday").checked?"Sim":"Não";data.lunch=$("lunch").checked?"Sim":"Não";
     // envia sempre para as duas vias: folha Google (tempo real) e cópia cifrada de segurança
     // as duas vias correm em paralelo, cada uma com limite de tempo, para o botão nunca ficar preso
-    const post=(url,opts,ms)=>{const c=new AbortController(),t=setTimeout(()=>c.abort(),ms);return fetch(url,{method:"POST",signal:c.signal,...opts}).finally(()=>clearTimeout(t))};
+    const post=(url,opts,ms)=>{const c=new AbortController(),t=setTimeout(()=>c.abort(),ms);return fetch(url,{method:"POST",keepalive:true,signal:c.signal,...opts}).finally(()=>clearTimeout(t))};
     const viaSheets=SHEETS?post(SHEETS,{mode:"no-cors",headers:{"Content-Type":"text/plain;charset=utf-8"},body:JSON.stringify(data)},12000).then(()=>true,()=>false):Promise.resolve(false);
     const viaBackup=(async()=>{
       const sealed=await seal(data);
       if(WORKER&&!WORKER.startsWith("__")){try{if((await post(WORKER,{body:sealed},12000)).ok)return true}catch(_){}}
       try{return (await post("https://ntfy.sh/"+TOPIC,{body:sealed},12000)).ok}catch(_){return false}
     })().catch(()=>false);
-    const [sheetsOk,backupOk]=await Promise.all([viaSheets,viaBackup]);
-    if(!sheetsOk&&!backupOk) throw 0;
+    // confirma logo que UMA das vias responde (a outra continua em segundo plano, keepalive); só falha se ambas falharem
+    const ok=await new Promise(res=>{let n=0,feito=false;[viaSheets,viaBackup].forEach(p=>p.then(v=>{if(v&&!feito){feito=true;res(true)}if(++n===2&&!feito)res(false)}))});
+    if(!ok) throw 0;
     $("f").reset();
     show("Inscrição recebida! Referência "+id.toUpperCase()+". Até 28 de Novembro. 🧱","ok");
   }catch(_){show("Não foi possível enviar. Tenta novamente dentro de instantes.","err")}
