@@ -185,12 +185,13 @@ $("f").addEventListener("submit",async e=>{
     const id=Array.from(crypto.getRandomValues(new Uint8Array(5)),x=>x.toString(16).padStart(2,"0")).join("");
     const data={id,ts:Date.now()};
     ["name","email","phone","age","church","notes"].forEach(k=>data[k]=$(k).value.trim());data.sunday=$("sunday").checked?"Sim":"Não";data.lunch=$("lunch").checked?"Sim":"Não";
-    let ok=false;window.__via="";
-    if(SHEETS){try{await fetch(SHEETS,{method:"POST",mode:"no-cors",headers:{"Content-Type":"text/plain;charset=utf-8"},body:JSON.stringify(data)});ok=true}catch(_){}}
-    const sealed=ok?"":await seal(data);
-    if(!ok&&WORKER&&!WORKER.startsWith("__")){try{const w=await fetch(WORKER,{method:"POST",body:sealed});window.__via="w"+w.status+":"+(await w.text()).slice(0,20);ok=w.ok}catch(e){window.__via="w-erro:"+e.message}}
-    if(!ok){ok=(await fetch("https://ntfy.sh/"+TOPIC,{method:"POST",body:sealed})).ok;window.__via+=" |ntfy"}
-    if(!ok) throw 0;
+    // envia sempre para as duas vias: folha Google (tempo real) e cópia cifrada de segurança
+    let sheetsOk=false,backupOk=false;
+    if(SHEETS){try{await fetch(SHEETS,{method:"POST",mode:"no-cors",headers:{"Content-Type":"text/plain;charset=utf-8"},body:JSON.stringify(data)});sheetsOk=true}catch(_){}}
+    const sealed=await seal(data);
+    if(WORKER&&!WORKER.startsWith("__")){try{backupOk=(await fetch(WORKER,{method:"POST",body:sealed})).ok}catch(_){}}
+    if(!backupOk){try{backupOk=(await fetch("https://ntfy.sh/"+TOPIC,{method:"POST",body:sealed})).ok}catch(_){}}
+    if(!sheetsOk&&!backupOk) throw 0;
     $("f").reset();
     show("Inscrição recebida! Referência "+id.toUpperCase()+". Até 28 de Novembro. 🧱","ok");
   }catch(_){show("Não foi possível enviar. Tenta novamente dentro de instantes.","err")}
