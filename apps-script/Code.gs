@@ -111,20 +111,33 @@ function enviarEmail(ref, d) {
     '<p style="margin-top:18px"><b>Até 28 de Novembro!</b><br>Equipa [re]constrói · AD Benfica</p>' +
     '</div></div>';
 
-  MailApp.sendEmail({
-    to: email,
-    subject: "[re]constrói · A tua inscrição está confirmada (Ref. " + ref + ")",
-    body: texto,
-    htmlBody: html,
-    name: "[re]constrói · AD Benfica",
+  // Envio via Brevo (API). A chave e o remetente ficam em Definições do projeto → Propriedades do script:
+//   BREVO_KEY    = chave da API (começa por "xkeysib-")
+//   BREVO_SENDER = email remetente validado no Brevo
+  const props = PropertiesService.getScriptProperties();
+  const chave = props.getProperty("BREVO_KEY"), remetente = props.getProperty("BREVO_SENDER");
+  if (!chave || !remetente) throw new Error("Falta BREVO_KEY ou BREVO_SENDER nas propriedades do script.");
+  const resp = UrlFetchApp.fetch("https://api.brevo.com/v3/smtp/email", {
+    method: "post",
+    contentType: "application/json",
+    headers: { "api-key": chave, accept: "application/json" },
+    muteHttpExceptions: true,
+    payload: JSON.stringify({
+      sender: { name: "[re]constrói · AD Benfica", email: remetente },
+      to: [{ email: email, name: nome || email }],
+      subject: "[re]constrói · A tua inscrição está confirmada (Ref. " + ref + ")",
+      htmlContent: html,
+      textContent: texto,
+    }),
   });
+  if (resp.getResponseCode() >= 300) throw new Error("Brevo " + resp.getResponseCode() + ": " + resp.getContentText().slice(0, 300));
 }
 
 // Corre no editor ("testarEmail" → Executar): envia um email de exemplo para a tua própria conta.
 function testarEmail() {
   const eu = Session.getEffectiveUser().getEmail();
   enviarEmail("TESTE0001", { name: "Hugo Oliveira", email: eu, phone: "", age: "40", church: "AD Benfica", notes: "Teste de email", sunday: "Sim", lunch: "Sim" });
-  Logger.log("Email de teste enviado para " + eu);
+  Logger.log("Email de teste enviado para " + eu + " (se não chegar, vê o erro em Execuções).");
 }
 
 function doGet() { return ContentService.createTextOutput("ok"); }
