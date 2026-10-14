@@ -1,3 +1,4 @@
+/** @OnlyCurrentDoc */
 // Recebe as inscrições do site e escreve-as na folha de cálculo (uma linha por inscrição).
 const ABA = "Inscrições";
 const CABECALHO = ["Ref", "Data/hora (Lisboa)", "Nome", "Email", "Telemóvel", "Faixa etária", "Igreja / comunidade", "Domingo (culto)", "Almoço", "Observações"];
