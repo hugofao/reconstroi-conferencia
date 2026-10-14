@@ -182,8 +182,12 @@ $("f").addEventListener("submit",async e=>{
   if($("website").value) return;                       // honeypot
   const tel=$("phone").value.replace(/\s+/g,"");$("phone").value=tel;
   if(tel&&!/^9\d{8}$/.test(tel)){show("O telemóvel deve ter 9 dígitos e começar por 9 (ex.: 912345678).","err");$("phone").focus();return}
-  const req=["name","email","age"].filter(i=>!$(i).value.trim());
-  if(req.length||!/^\d{1,3}$/.test($("age").value.trim())||!$("email").checkValidity()||!$("rgpd").checked){show("Por favor preenche os campos obrigatórios (*), indica a idade em números e aceita o tratamento de dados.","err");return}
+  const falta=[];
+  if(!$("name").value.trim()) falta.push(["name","o nome"]);
+  if(!$("email").value.trim()||!$("email").checkValidity()) falta.push(["email","um email válido"]);
+  if(!/^\d{1,3}$/.test($("age").value.trim())) falta.push(["age","a idade (só números)"]);
+  if(!$("rgpd").checked) falta.push(["rgpd","a autorização de tratamento de dados (caixa no fim)"]);
+  if(falta.length){show("Falta preencher: "+falta.map(f=>f[1]).join("; ")+".","err");$(falta[0][0]).focus();return}
   const btn=$("go");btn.disabled=true;btn.textContent="A enviar…";
   try{
     const id=Array.from(crypto.getRandomValues(new Uint8Array(5)),x=>x.toString(16).padStart(2,"0")).join("");
