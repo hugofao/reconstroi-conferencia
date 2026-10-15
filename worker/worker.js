@@ -5,10 +5,11 @@
 // SMTP_HOST, SMTP_PORT (587 = STARTTLS, 465 = TLS), SMTP_USER, SMTP_PASS, SMTP_FROM (endereço remetente)
 import { WorkerMailer } from "worker-mailer";
 const REPO = "hugofao/reconstroi-conferencia";
-const ORIGIN = "https://hugofao.github.io";
+// endereços do site autorizados a enviar inscrições (acrescentar aqui o novo endereço do site)
+const ORIGINS = ["https://hugofao.github.io"];
 const NTFY_TOPIC = "reconstroi-b9eaf7b17932dcd721ba53a6"; // já é público no site
 
-const cors = { "Access-Control-Allow-Origin": ORIGIN, "Access-Control-Allow-Methods": "POST, OPTIONS", "Access-Control-Allow-Headers": "Content-Type" };
+const corsFor = (req) => ({ "Access-Control-Allow-Origin": ORIGINS.includes(req.headers.get("Origin")) ? req.headers.get("Origin") : ORIGINS[0], "Vary": "Origin", "Access-Control-Allow-Methods": "POST, OPTIONS", "Access-Control-Allow-Headers": "Content-Type" });
 
 const EMAIL_RE = /^[^\s@<>"]+@[^\s@<>"]+\.[^\s@<>"]+$/;
 
@@ -35,9 +36,10 @@ async function enviarEmail(req, env) {
 export default {
   async fetch(req, env, ctx) {
     if (req.method === "POST" && new URL(req.url).pathname === "/email") return enviarEmail(req, env);
+    const cors = corsFor(req);
     if (req.method === "GET") return new Response(env.GH_TOKEN ? "token: sim" : "token: NAO", { status: 200 });
     if (req.method === "OPTIONS") return new Response(null, { status: 204, headers: cors });
-    if (req.method !== "POST" || req.headers.get("Origin") !== ORIGIN) return new Response("no", { status: 403, headers: cors });
+    if (req.method !== "POST" || !ORIGINS.includes(req.headers.get("Origin"))) return new Response("no", { status: 403, headers: cors });
     const body = (await req.text()).trim();
     if (body.length < 100 || body.length > 6000 || !/^[A-Za-z0-9+/=]+$/.test(body)) return new Response("bad", { status: 400, headers: cors });
 
