@@ -202,7 +202,7 @@ $("f").addEventListener("submit",async e=>{
     $("msg").appendChild(ul);$("msg").className="err";$(erros[0][0]).focus();return}
   const btn=$("go");btn.disabled=true;btn.textContent="A enviar…";
   try{
-    const id=Array.from(crypto.getRandomValues(new Uint8Array(5)),x=>"23456789ABCDEFGHJKMNPQRSTUVWXYZ"[x%31]).join("");
+    const id=Array.from(crypto.getRandomValues(new Uint8Array(6)),x=>"23456789ABCDEFGHJKMNPQRSTUVWXYZ"[x%31]).join("");
     const data={id,ts:Date.now()};
     ["name","email","phone","age","church","notes"].forEach(k=>data[k]=$(k).value.trim());data.sunday=$("sunday").checked?"Sim":"Não";data.lunch=$("lunch").checked?"Sim":"Não";
     // envia sempre para as duas vias: folha Google (tempo real) e cópia cifrada de segurança
