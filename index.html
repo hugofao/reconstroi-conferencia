@@ -26,7 +26,8 @@ nav div{display:flex;gap:18px;font-size:14px}nav a{color:var(--tx);text-decorati
 .hero{position:relative;min-height:78vh;display:flex;align-items:center;background:linear-gradient(rgba(20,16,13,.55) 0,rgba(20,16,13,.7) 55%,var(--bg) 100%),url(assets/fundo-topo.jpg) center top/cover no-repeat;padding:70px 0 90px;text-align:center}
 .hero .w{width:100%}.hero small{letter-spacing:.14em;text-transform:uppercase;font-weight:500;color:var(--mut)}
 .hero .logo{position:absolute;top:22px;left:clamp(16px,3vw,40px);width:clamp(73px,10.5vw,119px);height:auto;filter:drop-shadow(0 1px 3px rgba(0,0,0,.55))}
-.hero h1{font-size:clamp(46px,12vw,110px);font-weight:800;margin:8px 0 14px;line-height:1;letter-spacing:-.02em}
+.hero h1{font-size:clamp(26px,calc((100vw - 40px) / 7.8),110px);white-space:nowrap;font-weight:800;margin:8px 0 14px;line-height:1;letter-spacing:-.02em}
+.hero .loc{white-space:nowrap}@media(max-width:560px){.hero .sep{display:none}.hero .loc{display:block}}
 .hero h1 i{font-style:normal;color:var(--or)}
 .hero p{font-size:20px;margin:6px 0}.hero .btn{margin-top:26px}
 .hero img{width:min(100%,560px);border-radius:10px;margin-top:34px;box-shadow:0 20px 60px #000a}
@@ -68,7 +69,7 @@ footer a{color:var(--mut)}
 <div class="w">
   <small>Conferência de Homens</small>
   <h1><i>[</i>RE<i>]</i>CONSTRÓI</h1>
-  <p><b>28 e 29 de Novembro de 2026</b> · AD Benfica</p>
+  <p class="when"><b>28 e 29 de Novembro de 2026</b><span class="sep"> · </span><span class="loc">AD Benfica</span></p>
   <p style="color:var(--mut)">Fé, família e gerações</p>
   <a class="btn" href="#inscricao">Inscreve-te</a>
 </div></header>
