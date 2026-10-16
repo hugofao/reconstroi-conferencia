@@ -4,7 +4,7 @@ const ABA = "Inscrições";
 const WORKER_EMAIL = "https://reconstroi-conferencia.hugofao.workers.dev/email";
 const LIMITE_EMAILS_DIA = 300;
 const IBAN = "PT50356000019001892861742";
-const EMAIL_COMPROVATIVO = "adbenfica@yahoo.com";
+const EMAIL_COMPROVATIVO = "reconstroi.adb@yahoo.com";
 const CABECALHO = ["Ref", "Data/hora (Lisboa)", "Nome", "Email", "Telemóvel", "Faixa etária", "Igreja / comunidade", "Domingo (culto)", "Almoço", "Observações"];
 
 function limpar(v) {
