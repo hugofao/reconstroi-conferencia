@@ -99,7 +99,7 @@ function enviarEmail(ref, d) {
     "Para garantires a refeição, faz o pagamento em avanço por transferência bancária:\n" +
     "IBAN: " + IBAN + "\n" +
     "Valor: 5 €\n" +
-    "Descrição sugerida: Almoço " + ref + "\n" +
+    "Descrição sugerida: RECONSTROI " + ref + "\n" +
     "Depois envia o comprovativo para " + EMAIL_COMPROVATIVO + ".\n" +
     "Nota: existe um limite de 100 refeições e só garantimos com comprovativo de pagamento.";
 
@@ -127,7 +127,7 @@ function enviarEmail(ref, d) {
         '<div style="background:#fff6ee;border:1px solid #f4cfae;border-radius:8px;padding:14px 16px;font-size:14px">' +
         '<p style="margin:0 0 8px">Reservaste o almoço de sábado (<b>Bifana do Trolha</b>: bifana no pão, batatas, bebida e café) — <b>custo 5 €</b>.</p>' +
         '<p style="margin:0 0 8px">Para garantires a refeição, faz o pagamento em avanço por transferência bancária:</p>' +
-        '<p style="margin:0 0 8px">IBAN: <b style="font-size:15px;letter-spacing:.3px">' + esc(IBAN) + '</b><br>Valor: <b>5 €</b><br>Descrição sugerida: <b>Almoço ' + esc(ref) + '</b></p>' +
+        '<p style="margin:0 0 8px">IBAN: <b style="font-size:15px;letter-spacing:.3px">' + esc(IBAN) + '</b><br>Valor: <b>5 €</b><br>Descrição sugerida: <b>RECONSTROI ' + esc(ref) + '</b></p>' +
         '<p style="margin:0 0 8px">Depois envia o comprovativo para <b>' + esc(EMAIL_COMPROVATIVO) + '</b>.</p>' +
         '<p style="margin:0;font-size:13px;color:#777"><i>Nota: existe um limite de 100 refeições e só garantimos com comprovativo de pagamento.</i></p>' +
         '</div>'
