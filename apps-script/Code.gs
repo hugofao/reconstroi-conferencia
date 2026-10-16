@@ -4,6 +4,8 @@ const ABA = "Inscrições";
 const WORKER_EMAIL = "https://reconstroi-conferencia.hugofao.workers.dev/email";
 const LIMITE_EMAILS_DIA = 300;
 const IBAN = "PT50356000019001892861742";
+const MORADA = "R. Julião Quintinha 16, 1500-381 Lisboa";
+const MAPS = "https://www.google.com/maps/place//data=!4m2!3m1!1s0xd1ecd27a697c509:0xe3be3ae9aeb91972?sa=X&ved=1t:8290&ictx=111";
 const EMAIL_COMPROVATIVO = "reconstroi.adb@gmail.com";
 const CABECALHO = ["Ref", "Data/hora (Lisboa)", "Nome", "Email", "Telemóvel", "Faixa etária", "Igreja / comunidade", "Domingo (culto)", "Almoço", "Observações"];
 
@@ -93,7 +95,9 @@ function enviarEmail(ref, d) {
   const evento = "28 e 29 de Novembro de 2026 · AD Benfica\n" +
     "Sábado de manhã: 09:30 às 13:00\n" +
     "Sábado de tarde: 14:30 às 17:00\n" +
-    "Domingo: 10:00 às 11:30";
+    "Domingo: 10:00 às 11:30\n" +
+    "Onde: AD Benfica, " + MORADA + "\n" +
+    MAPS;
 
   // Dados de pagamento: só aparecem quando a pessoa reservou almoço
   const almoco = sim(d.lunch);
@@ -135,7 +139,8 @@ function enviarEmail(ref, d) {
         '</div>'
       : '') +
     '<h3 style="margin:24px 0 8px;color:#f26b1d">Quando e onde</h3>' +
-    '<p style="margin:0">' + esc(evento) + '</p>' +
+    '<p style="margin:0">' + esc(evento.split("\nOnde:")[0]) + '</p>' +
+    '<p style="margin:10px 0 0"><b>Onde:</b> AD Benfica<br><a href="' + esc(MAPS) + '" style="color:#f26b1d">' + esc(MORADA) + '</a></p>' +
     '<p style="margin-top:22px;font-size:13px;color:#777">Guarda este email: a referência <b>' + esc(ref) + '</b> identifica a tua inscrição.</p>' +
     '<p style="margin-top:18px"><b>Até 28 de Novembro!</b><br>Equipa [re]constrói · AD Benfica</p>' +
     '</div></div>';
