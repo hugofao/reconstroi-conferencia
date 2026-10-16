@@ -82,14 +82,16 @@ function enviarEmail(ref, d) {
   ].map(([k, v]) => [k, v.slice(0, 500)]);
 
   const agradecimento =
-    "Querido " + primeiro + ",\n\n" +
+    "Caro " + primeiro + ",\n\n" +
     "Obrigado por te inscreveres na conferência [re]constrói. A tua presença é uma bênção para nós. " +
     "Acreditamos que, quando os homens se reúnem para buscar a Deus, se fortalecem os lares, as famílias e as gerações que vêm depois. " +
     "\"Se o Senhor não edificar a casa, em vão trabalham os que a edificam.\" (Salmo 127:1)\n\n" +
-    "Estamos a preparar tudo com muito carinho e vamos orar por ti até ao dia. Vem de coração aberto: vamos [re]construir juntos.";
+    "Vem de coração aberto: vamos [re]construir juntos.";
 
   const evento = "28 e 29 de Novembro de 2026 · AD Benfica\n" +
-    "Sábado de manhã: 09:30 às 13:00 · Sábado de tarde: 14:30 às 17:00 · Domingo: 10:00 às 11:30";
+    "Sábado de manhã: 09:30 às 13:00\n" +
+    "Sábado de tarde: 14:30 às 17:00\n" +
+    "Domingo: 10:00 às 11:30";
 
   // Dados de pagamento: só aparecem quando a pessoa reservou almoço
   const almoco = sim(d.lunch);
@@ -111,11 +113,11 @@ function enviarEmail(ref, d) {
     '<div style="background:#1a1410;color:#fff;padding:22px 24px;border-radius:10px 10px 0 0"><div style="font-size:24px;font-weight:800">[re]constrói</div>' +
     '<div style="color:#f26b1d;font-size:14px;margin-top:2px">Conferência de Homens · 28 e 29 Nov 2026 · AD Benfica</div></div>' +
     '<div style="border:1px solid #e5ddd5;border-top:0;padding:24px;border-radius:0 0 10px 10px">' +
-    '<p style="font-size:18px;margin:0 0 12px"><b>Querido ' + esc(primeiro) + ',</b></p>' +
+    '<p style="font-size:18px;margin:0 0 12px"><b>Caro ' + esc(primeiro) + ',</b></p>' +
     '<p>Obrigado por te inscreveres na conferência <b>[re]constrói</b>. A tua presença é uma bênção para nós. ' +
     'Acreditamos que, quando os homens se reúnem para buscar a Deus, se fortalecem os lares, as famílias e as gerações que vêm depois.</p>' +
     '<p style="border-left:4px solid #f26b1d;padding-left:12px;color:#555"><i>"Se o Senhor não edificar a casa, em vão trabalham os que a edificam."</i> — Salmo 127:1</p>' +
-    '<p>Estamos a preparar tudo com muito carinho e vamos orar por ti até ao dia. Vem de coração aberto: vamos [re]construir juntos.</p>' +
+    '<p>Vem de coração aberto: vamos [re]construir juntos.</p>' +
     '<h3 style="margin:24px 0 8px;color:#f26b1d">O teu registo</h3>' +
     '<table style="border-collapse:collapse;width:100%;font-size:14px">' +
     linhas.map(([k, v]) => '<tr><td style="padding:6px 10px;border-bottom:1px solid #eee;color:#777;width:42%">' + esc(k) + '</td><td style="padding:6px 10px;border-bottom:1px solid #eee"><b>' + esc(v) + '</b></td></tr>').join("") +
@@ -131,7 +133,7 @@ function enviarEmail(ref, d) {
         '</div>'
       : '') +
     '<h3 style="margin:24px 0 8px;color:#f26b1d">Quando e onde</h3>' +
-    '<p style="margin:0">' + esc(evento).replace(/ · Sábado de tarde/, "<br>Sábado de tarde") + '</p>' +
+    '<p style="margin:0">' + esc(evento) + '</p>' +
     '<p style="margin-top:22px;font-size:13px;color:#777">Guarda este email: a referência <b>' + esc(ref) + '</b> identifica a tua inscrição.</p>' +
     '<p style="margin-top:18px"><b>Até 28 de Novembro!</b><br>Equipa [re]constrói · AD Benfica</p>' +
     '</div></div>';
