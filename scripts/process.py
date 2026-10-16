@@ -37,15 +37,16 @@ def main(messages):
     pw = os.environ["XLSX_PASSWORD"]
     priv = serialization.load_pem_private_key(os.environ["RSA_PRIVATE_KEY"].encode(), None)
     wb = load(pw); ws = wb.active; ws["F1"] = "Faixa etária"; ws["J1"] = "Almoço"; ws["J1"].font = openpyxl.styles.Font(bold=True)
-    seen = {r[0] for r in ws.iter_rows(min_row=2, values_only=True)}
+    seen = {(r[0], str(r[3] or "").lower()) for r in ws.iter_rows(min_row=2, values_only=True)}  # (ref, email): refs curtas podem coincidir entre pessoas
     added = 0; errors = 0
     for m in messages:
         try:
             d = decrypt(m, priv)
             ref = str(d["id"])[:12].upper()
-            if ref in seen or not str(d.get("name", "")).strip(): continue
+            key = (ref, str(clean(d.get("email")) or "").lower())
+            if key in seen or not str(d.get("name", "")).strip(): continue
             ts = datetime.datetime.utcfromtimestamp(int(d["ts"]) / 1000).strftime("%Y-%m-%d %H:%M")
-            ws.append([ref, ts] + [clean(d.get(k)) for k in KEYS]); seen.add(ref); added += 1
+            ws.append([ref, ts] + [clean(d.get(k)) for k in KEYS]); seen.add(key); added += 1
         except Exception as e:
             errors += 1; print('mensagem ignorada:', type(e).__name__); continue
     if added or not os.path.exists(XLSX): save(wb, pw)

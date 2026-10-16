@@ -46,8 +46,10 @@ function doPost(e) {
     }
     const ref = String(d.id || "").slice(0, 12).toUpperCase();
     if (ref && sh.getLastRow() > 1) {
-      const refs = sh.getRange(2, 1, sh.getLastRow() - 1, 1).getValues().flat();
-      if (refs.indexOf(ref) !== -1) return ContentService.createTextOutput("repetido");
+      // repetido = mesma referência E mesmo email (reenvio); referência igual com outro email é só coincidência e regista-se na mesma
+      const mail = String(limpar(d.email)).toLowerCase();
+      const linhas = sh.getRange(2, 1, sh.getLastRow() - 1, 4).getValues();
+      if (linhas.some((l) => String(l[0]) === ref && String(l[3]).toLowerCase() === mail)) return ContentService.createTextOutput("repetido");
     }
     const quando = Utilities.formatDate(new Date(), "Europe/Lisbon", "yyyy-MM-dd HH:mm");
     sh.appendRow([ref, quando, limpar(d.name), limpar(d.email), "'" + limpar(d.phone), limpar(d.age), limpar(d.church), limpar(d.sunday), limpar(d.lunch), limpar(d.notes)]);
