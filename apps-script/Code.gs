@@ -3,6 +3,8 @@
 const ABA = "Inscrições";
 const WORKER_EMAIL = "https://reconstroi-conferencia.hugofao.workers.dev/email";
 const LIMITE_EMAILS_DIA = 300;
+const IBAN = "PT50356000019001892861742";
+const EMAIL_COMPROVATIVO = "hugofao@gmail.com";
 const CABECALHO = ["Ref", "Data/hora (Lisboa)", "Nome", "Email", "Telemóvel", "Faixa etária", "Igreja / comunidade", "Domingo (culto)", "Almoço", "Observações"];
 
 function limpar(v) {
@@ -89,7 +91,18 @@ function enviarEmail(ref, d) {
   const evento = "28 e 29 de Novembro de 2026 · AD Benfica\n" +
     "Sábado de manhã: 09:30 às 13:00 · Sábado de tarde: 14:30 às 17:00 · Domingo: 10:00 às 11:30";
 
+  // Dados de pagamento: só aparecem quando a pessoa reservou almoço
+  const almoco = sim(d.lunch);
+  const pagamentoTxt = "Reservaste o almoço de sábado (Bifana do Trolha: bifana no pão, batatas, bebida e café) — custo 5 €.\n" +
+    "Para garantires a refeição, faz o pagamento em avanço por transferência bancária:\n" +
+    "IBAN: " + IBAN + "\n" +
+    "Valor: 5 €\n" +
+    "Descrição sugerida: Almoço " + ref + " - " + nome + "\n" +
+    "Depois envia o comprovativo para " + EMAIL_COMPROVATIVO + ".\n" +
+    "Nota: existe um limite de 100 refeições e só garantimos com comprovativo de pagamento.";
+
   const texto = agradecimento + "\n\n— O TEU REGISTO —\n" + linhas.map(([k, v]) => k + ": " + v).join("\n") +
+    (almoco ? "\n\n— PAGAMENTO DO ALMOÇO —\n" + pagamentoTxt : "") +
     "\n\n— QUANDO E ONDE —\n" + evento +
     "\n\nGuarda este email: a referência " + ref + " identifica a tua inscrição.\n\nAté 28 de Novembro!\nEquipa [re]constrói · AD Benfica";
 
@@ -107,6 +120,16 @@ function enviarEmail(ref, d) {
     '<table style="border-collapse:collapse;width:100%;font-size:14px">' +
     linhas.map(([k, v]) => '<tr><td style="padding:6px 10px;border-bottom:1px solid #eee;color:#777;width:42%">' + esc(k) + '</td><td style="padding:6px 10px;border-bottom:1px solid #eee"><b>' + esc(v) + '</b></td></tr>').join("") +
     '</table>' +
+    (almoco
+      ? '<h3 style="margin:24px 0 8px;color:#f26b1d">Pagamento do almoço 🥪</h3>' +
+        '<div style="background:#fff6ee;border:1px solid #f4cfae;border-radius:8px;padding:14px 16px;font-size:14px">' +
+        '<p style="margin:0 0 8px">Reservaste o almoço de sábado (<b>Bifana do Trolha</b>: bifana no pão, batatas, bebida e café) — <b>custo 5 €</b>.</p>' +
+        '<p style="margin:0 0 8px">Para garantires a refeição, faz o pagamento em avanço por transferência bancária:</p>' +
+        '<p style="margin:0 0 8px">IBAN: <b style="font-size:15px;letter-spacing:.3px">' + esc(IBAN) + '</b><br>Valor: <b>5 €</b><br>Descrição sugerida: <b>Almoço ' + esc(ref) + ' - ' + esc(nome) + '</b></p>' +
+        '<p style="margin:0 0 8px">Depois envia o comprovativo para <b>' + esc(EMAIL_COMPROVATIVO) + '</b>.</p>' +
+        '<p style="margin:0;font-size:13px;color:#777"><i>Nota: existe um limite de 100 refeições e só garantimos com comprovativo de pagamento.</i></p>' +
+        '</div>'
+      : '') +
     '<h3 style="margin:24px 0 8px;color:#f26b1d">Quando e onde</h3>' +
     '<p style="margin:0">' + esc(evento).replace(/ · Sábado de tarde/, "<br>Sábado de tarde") + '</p>' +
     '<p style="margin-top:22px;font-size:13px;color:#777">Guarda este email: a referência <b>' + esc(ref) + '</b> identifica a tua inscrição.</p>' +
