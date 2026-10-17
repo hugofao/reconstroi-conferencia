@@ -6,7 +6,6 @@ const LIMITE_EMAILS_DIA = 300;
 const IBAN = "PT50356000019001892861742";
 const MORADA = "R. Julião Quintinha 16, 1500-381 Lisboa";
 const MAPS = "https://www.google.com/maps/place//data=!4m2!3m1!1s0xd1ecd27a697c509:0xe3be3ae9aeb91972?sa=X&ved=1t:8290&ictx=111";
-const SITE = "https://reconstroi-adb.lovable.app/";
 const EMAIL_COMPROVATIVO = "reconstroi.adb@gmail.com";
 const CABECALHO = ["Ref", "Data/hora (Lisboa)", "Nome", "Email", "Telemóvel", "Faixa etária", "Igreja / comunidade", "Domingo (culto)", "Almoço", "Observações"];
 
@@ -113,7 +112,7 @@ function enviarEmail(ref, d) {
   const texto = agradecimento + "\n\n— O TEU REGISTO —\n" + linhas.map(([k, v]) => k + ": " + v).join("\n") +
     (almoco ? "\n\n— PAGAMENTO DO ALMOÇO —\n" + pagamentoTxt : "") +
     "\n\n— QUANDO E ONDE —\n" + evento +
-    "\n\nGuarda este email: a referência " + ref + " identifica a tua inscrição.\n\nAté 28 de Novembro!\nEquipa [RE]CONSTRÓI · AD Benfica (" + SITE + ")";
+    "\n\nGuarda este email: a referência " + ref + " identifica a tua inscrição.\n\nAté 28 de Novembro!\nEquipa [RE]CONSTRÓI · AD Benfica";
 
   const html =
     '<div style="font-family:Arial,Helvetica,sans-serif;max-width:560px;margin:0 auto;color:#222;line-height:1.55">' +
@@ -143,7 +142,7 @@ function enviarEmail(ref, d) {
     '<p style="margin:0">' + esc(evento.split("\nOnde:")[0]) + '</p>' +
     '<p style="margin:10px 0 0"><b>Onde:</b> AD Benfica<br><a href="' + esc(MAPS) + '" style="color:#f26b1d">' + esc(MORADA) + '</a></p>' +
     '<p style="margin-top:22px;font-size:13px;color:#777">Guarda este email: a referência <b>' + esc(ref) + '</b> identifica a tua inscrição.</p>' +
-    '<p style="margin-top:18px"><b>Até 28 de Novembro!</b><br>Equipa <a href="' + SITE + '" style="color:#f26b1d;font-weight:bold;text-decoration:none">[RE]CONSTRÓI</a> · AD Benfica</p>' +
+    '<p style="margin-top:18px"><b>Até 28 de Novembro!</b><br>Equipa [RE]CONSTRÓI · AD Benfica</p>' +
     '</div></div>';
 
   // Envio por SMTP através do Cloudflare Worker (rota /email). Propriedade do script necessária
