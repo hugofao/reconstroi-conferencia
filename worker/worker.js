@@ -25,7 +25,7 @@ async function enviarEmail(req, env) {
   try {
     await WorkerMailer.send(
       { host: env.SMTP_HOST, port, secure: port === 465, startTls: port !== 465, credentials: { username: env.SMTP_USER, password: env.SMTP_PASS }, authType: ["plain", "login"] },
-      { from: { name: "[re]constrói · AD Benfica", email: env.SMTP_FROM }, to: { name: nome || to, email: to }, subject: String(m.subject), text: String(m.text), html: m.html ? String(m.html) : undefined },
+      { from: { name: "RE-CONSTRÓI - ADB", email: env.SMTP_FROM }, to: { name: nome || to, email: to }, subject: String(m.subject), text: String(m.text), html: m.html ? String(m.html) : undefined },
     );
     return new Response("ok", { status: 200 });
   } catch (e) {
