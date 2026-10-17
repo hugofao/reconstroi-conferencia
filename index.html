@@ -223,7 +223,7 @@ $("f").addEventListener("submit",async e=>{
     const ok=await new Promise(res=>{let n=0,feito=false;[viaSheets,viaBackup].forEach(p=>p.then(v=>{if(v&&!feito){feito=true;res(true)}if(++n===2&&!feito)res(false)}))});
     if(!ok) throw 0;
     $("f").reset();
-    show("Inscrição recebida! Referência "+id.toUpperCase()+". Até 28 de Novembro. 🧱","ok");
+    show("Inscrição recebida! Referência "+id.toUpperCase()+". Vais receber um email de confirmação em alguns minutos (verifica também a pasta de Spam). Até 28 de Novembro. 🧱","ok");
   }catch(_){show("Não foi possível enviar. Tenta novamente dentro de instantes.","err")}
   btn.disabled=false;btn.textContent="Confirmar inscrição";
 });
