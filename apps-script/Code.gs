@@ -163,7 +163,7 @@ function enviarEmail(ref, d) {
     payload: JSON.stringify({
       to: email,
       name: nome,
-      subject: "[re]constrói · A tua inscrição está confirmada (Ref. " + ref + ")",
+      subject: "RE-CONSTRÓI · A tua inscrição está confirmada (Ref. " + ref + ")",
       html: html,
       text: texto,
     }),
