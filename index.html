@@ -36,7 +36,7 @@ h2{font-size:clamp(28px,5vw,40px);font-weight:800;margin:0 0 8px}h2 i{font-style
 .lead{color:var(--mut);max-width:680px;margin:0 0 30px}
 .grid{display:grid;gap:18px;grid-template-columns:repeat(auto-fit,minmax(260px,1fr))}
 .card{background:var(--card);border:1px solid var(--ln);border-radius:12px;padding:24px}
-.card h3{margin:0 0 6px;font-size:20px}.card h3 i{font-style:normal;color:var(--or)}.card .role{color:var(--or2);font-weight:700;font-size:13px;letter-spacing:.06em;text-transform:uppercase}
+.card .ph{display:block;width:100%;height:auto;aspect-ratio:4/3;object-fit:cover;object-position:center 22%;border-radius:8px;border:1px solid var(--ln);margin:0 0 18px;background:var(--bg)}.card h3{margin:0 0 6px;font-size:20px}.card h3 i{font-style:normal;color:var(--or)}.card .role{color:var(--or2);font-weight:700;font-size:13px;letter-spacing:.06em;text-transform:uppercase}
 .card p{margin:10px 0 0;color:var(--mut);font-size:15px}
 .fact{display:flex;gap:14px;flex-wrap:wrap;margin:22px 0 0}.fact span{background:var(--bg2);border:1px solid var(--ln);border-radius:999px;padding:8px 16px;font-size:14px}
 .day{margin:34px 0 10px;font-size:22px;font-weight:700;color:var(--or2)}.day small{display:block;color:var(--mut);font-size:14px;font-weight:500}
@@ -88,8 +88,8 @@ footer a{color:var(--mut)}
 <section id="oradores"><div class="w">
   <h2>Oradores</h2>
   <div class="grid">
-    <div class="card"><div class="role">Sábado · Manhã</div><h3>Samuel Antunes</h3><p>Psicólogo, psicoterapeuta e professor universitário</p></div>
-    <div class="card"><div class="role">Sábado · Tarde</div><h3>Pastor Carlos Cardoso</h3><p>Pregador Convidado</p></div>
+    <div class="card"><img class="ph" src="assets/samuel-antunes.jpg" alt="Samuel Antunes" width="640" height="480" loading="lazy"><div class="role">Sábado · Manhã</div><h3>Samuel Antunes</h3><p>Psicólogo, psicoterapeuta e professor universitário</p></div>
+    <div class="card"><img class="ph" src="assets/carlos-cardoso.jpg" alt="Pastor Carlos Cardoso" width="640" height="480" loading="lazy"><div class="role">Sábado · Tarde</div><h3>Pastor Carlos Cardoso</h3><p>Pregador Convidado</p></div>
   </div>
 </div></section>
 
