@@ -208,7 +208,7 @@ const COUNTDOWN_HTML = `<div style="margin:0;padding:0;background:#f4f1ec;"><tab
 </td></tr>
 
 <tr><td style="padding:28px 28px 8px 28px;">
-<p style="margin:0 0 16px 0;">Olá,</p>
+<p style="margin:0 0 16px 0;">Olá {{NOME}},</p>
 <p style="margin:0 0 16px 0;font-size:20px;font-weight:bold;">{{FALTAM}} para a Conferência de Homens [RE]CONSTRÓI!</p>
 <p style="margin:0 0 16px 0;">Por estes dias está tudo a ser construído para vivermos juntos um tempo excelente. Os andaimes já estão montados, as fundações estão a ser preparadas e cada detalhe está a ser pensado para ti.</p>
 <!-- Aviso de obra com o versículo lema -->
@@ -237,7 +237,7 @@ const COUNTDOWN_HTML = `<div style="margin:0;padding:0;background:#f4f1ec;"><tab
 </td></tr>
 </table></div>`;
 
-const COUNTDOWN_TEXT = `Olá,
+const COUNTDOWN_TEXT = `Olá {{NOME}},
 
 {{FALTAM}} para a Conferência de Homens [RE]CONSTRÓI!
 
@@ -267,6 +267,9 @@ A equipa [RE]CONSTRÓI`;
 
 function enviarCountdownPara(email, nome) {
   const faltam = countdownFaltam();
+  const primeiro = String(nome || "").trim().split(/\s+/)[0].slice(0, 40);
+  const preencher = (t, html) => t.split("{{FALTAM}}").join(faltam)
+    .split(primeiro ? "{{NOME}}" : " {{NOME}}").join(primeiro ? (html ? esc(primeiro) : primeiro) : "");
   const props = PropertiesService.getScriptProperties();
   const segredo = props.getProperty("EMAIL_SECRET");
   if (!segredo) throw new Error("Falta EMAIL_SECRET nas propriedades do script.");
@@ -283,8 +286,8 @@ function enviarCountdownPara(email, nome) {
       to: email,
       name: nome,
       subject: "[RE] CONSTRÓI - " + faltam + " - A obra está quase a começar",
-      html: COUNTDOWN_HTML.split("{{FALTAM}}").join(faltam),
-      text: COUNTDOWN_TEXT.split("{{FALTAM}}").join(faltam),
+      html: preencher(COUNTDOWN_HTML, true),
+      text: preencher(COUNTDOWN_TEXT, false),
     }),
   });
   if (resp.getResponseCode() >= 300) throw new Error("Envio falhou para " + email + " (" + resp.getResponseCode() + "): " + resp.getContentText().slice(0, 300));
