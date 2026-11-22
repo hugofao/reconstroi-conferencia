@@ -180,3 +180,151 @@ function testarEmail() {
 }
 
 function doGet() { return ContentService.createTextOutput("ok"); }
+
+
+// ───────────────────────── Email "countdown" para os inscritos ─────────────────────────
+// Usa o mesmo envio do email de confirmação (Cloudflare Worker /email, propriedade EMAIL_SECRET).
+// 1) Teste: "enviarCountdownTeste" → Executar (envia só para a inscrição com a Ref. abaixo).
+// 2) Todos: "enviarCountdownTodos" → Executar (um email por endereço; não repete quem já recebeu).
+const COUNTDOWN_REF_TESTE = "E94UD4";
+const COUNTDOWN_DATA = "2026-11-28";
+
+function countdownFaltam() {
+  const hoje = Utilities.formatDate(new Date(), "Europe/Lisbon", "yyyy-MM-dd");
+  const dias = Math.round((Date.parse(COUNTDOWN_DATA + "T00:00:00Z") - Date.parse(hoje + "T00:00:00Z")) / 86400000);
+  if (dias < 1) throw new Error("A conferência já começou: não há contagem decrescente para enviar.");
+  return dias === 1 ? "Falta 1 dia" : "Faltam " + dias + " dias";
+}
+
+const COUNTDOWN_HTML = `<div style="margin:0;padding:0;background:#f4f1ec;"><table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#f4f1ec;">
+<tr><td align="center" style="padding:12px 12px 24px 12px;">
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="max-width:600px;background:#ffffff;border-radius:8px;overflow:hidden;font-family:Arial,Helvetica,sans-serif;color:#222222;font-size:16px;line-height:1.55;">
+
+<!-- Banner -->
+<tr><td style="padding:0;background:#14100d;">
+<a href="https://hugofao.github.io/reconstroi-conferencia/#programa" style="text-decoration:none;">
+<img src="https://hugofao.github.io/reconstroi-conferencia/assets/banner-email.jpg" width="600" alt="[RE]CONSTRÓI — Conferência de Homens · 28 e 29 de Novembro de 2026 · AD Benfica" style="display:block;width:100%;max-width:600px;height:auto;border:0;">
+</a>
+</td></tr>
+
+<tr><td style="padding:28px 28px 8px 28px;">
+<p style="margin:0 0 16px 0;">Olá,</p>
+<p style="margin:0 0 16px 0;font-size:20px;font-weight:bold;">{{FALTAM}} para a Conferência de Homens [RE]CONSTRÓI!</p>
+<p style="margin:0 0 16px 0;">Por estes dias está tudo a ser construído para vivermos juntos um tempo excelente. Os andaimes já estão montados, as fundações estão a ser preparadas e cada detalhe está a ser pensado para ti.</p>
+<!-- Aviso de obra com o versículo lema -->
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin:4px 0 22px 0;border:3px solid #14100d;border-radius:6px;overflow:hidden;">
+<tr><td style="background:#f26a1b;padding:8px 16px;font-size:13px;font-weight:800;letter-spacing:3px;color:#14100d;text-align:center;">⚠ AVISO DE OBRA ⚠</td></tr>
+<tr><td style="background:#14100d;padding:18px 20px;color:#f4ece4;font-size:14px;line-height:1.7;">
+<span style="color:#b9aa9a;">Obra:</span> <strong>[RE]CONSTRÓI · Conferência de Homens</strong><br>
+<span style="color:#b9aa9a;">Dono da obra:</span> <strong>O Senhor</strong><br>
+<span style="color:#b9aa9a;">Licença de construção:</span> <strong>Salmo 127:1</strong>
+<p style="margin:14px 0 4px 0;font-size:18px;line-height:1.45;font-style:italic;color:#ffffff;">“Se o Senhor não edificar a casa, em vão trabalham os que a edificam.”</p>
+</td></tr>
+</table>
+<p style="margin:0 0 16px 0;">Por isso, antes de pegarmos nos tijolos, entregamos a planta a Quem sabe construir. Vem com o coração aberto.</p>
+<p style="margin:0 0 16px 0;">
+📅 <strong>Sábado, 28 de novembro</strong>, das 09:30 às 17:00<br>
+📍 <strong>AD Benfica</strong><br>
+⛪ <strong>Domingo, 29 de novembro</strong>: Celebração e Encerramento
+</p>
+<p style="margin:0 0 20px 0;">🌐 <a href="https://hugofao.github.io/reconstroi-conferencia/#programa" style="color:#f26a1b;font-weight:bold;">Consulta aqui o programa completo</a></p>
+<p style="margin:0 0 6px 0;"><strong>🍽️ Ainda há almoços disponíveis</strong></p>
+<p style="margin:0 0 16px 0;">Se ainda não reservaste, responde a este e-mail a dizer que queres reservar.</p>
+<p style="margin:0 0 16px 0;">Traz um amigo ou familiar e vem fazer a obra em equipa.</p>
+<p style="margin:0 0 24px 0;">Até sábado!<br><strong>A equipa [RE]CONSTRÓI</strong></p>
+</td></tr>
+</table>
+</td></tr>
+</table></div>`;
+
+const COUNTDOWN_TEXT = `Olá,
+
+{{FALTAM}} para a Conferência de Homens [RE]CONSTRÓI!
+
+Por estes dias está tudo a ser construído para vivermos juntos um tempo excelente. Os andaimes já estão montados, as fundações estão a ser preparadas e cada detalhe está a ser pensado para ti.
+
+⚠ AVISO DE OBRA ⚠
+Obra: [RE]CONSTRÓI · Conferência de Homens
+Dono da obra: O Senhor
+Licença de construção: Salmo 127:1
+"Se o Senhor não edificar a casa, em vão trabalham os que a edificam."
+
+Por isso, antes de pegarmos nos tijolos, entregamos a planta a Quem sabe construir. Vem com o coração aberto.
+
+📅 Sábado, 28 de novembro, das 09:30 às 17:00
+📍 AD Benfica
+⛪ Domingo, 29 de novembro: Celebração e Encerramento
+
+🌐 Programa completo: https://hugofao.github.io/reconstroi-conferencia/#programa
+
+🍽️ Ainda há almoços disponíveis
+Se ainda não reservaste, responde a este e-mail a dizer que queres reservar.
+
+Traz um amigo ou familiar e vem fazer a obra em equipa.
+
+Até sábado!
+A equipa [RE]CONSTRÓI`;
+
+function enviarCountdownPara(email, nome) {
+  const faltam = countdownFaltam();
+  const props = PropertiesService.getScriptProperties();
+  const segredo = props.getProperty("EMAIL_SECRET");
+  if (!segredo) throw new Error("Falta EMAIL_SECRET nas propriedades do script.");
+  const hoje = Utilities.formatDate(new Date(), "Europe/Lisbon", "yyyyMMdd");
+  const [dia, n] = String(props.getProperty("EMAILS_DIA") || "").split(":");
+  const enviados = dia === hoje ? Number(n) : 0;
+  if (enviados >= LIMITE_EMAILS_DIA) throw new Error("Limite diário de emails atingido (" + LIMITE_EMAILS_DIA + ").");
+  const resp = UrlFetchApp.fetch(WORKER_EMAIL, {
+    method: "post",
+    contentType: "application/json",
+    headers: { "x-secret": segredo },
+    muteHttpExceptions: true,
+    payload: JSON.stringify({
+      to: email,
+      name: nome,
+      subject: "[RE] CONSTRÓI - " + faltam + " - A obra está quase a começar",
+      html: COUNTDOWN_HTML.split("{{FALTAM}}").join(faltam),
+      text: COUNTDOWN_TEXT.split("{{FALTAM}}").join(faltam),
+    }),
+  });
+  if (resp.getResponseCode() >= 300) throw new Error("Envio falhou para " + email + " (" + resp.getResponseCode() + "): " + resp.getContentText().slice(0, 300));
+  props.setProperty("EMAILS_DIA", hoje + ":" + (enviados + 1));
+}
+
+function linhasInscritos() {
+  const sh = folha().getSheetByName(ABA);
+  if (!sh || sh.getLastRow() < 2) return [];
+  return sh.getRange(2, 1, sh.getLastRow() - 1, 4).getValues()
+    .map((l) => ({ ref: String(l[0]).trim().toUpperCase(), nome: String(l[2]).trim(), email: String(l[3]).trim() }))
+    .filter((l) => /^[^\s@<>"]+@[^\s@<>"]+\.[^\s@<>"]+$/.test(l.email));
+}
+
+function enviarCountdownTeste() {
+  const l = linhasInscritos().find((x) => x.ref === COUNTDOWN_REF_TESTE);
+  if (!l) throw new Error("Não encontrei nenhuma inscrição com a Ref. " + COUNTDOWN_REF_TESTE + " e um email válido.");
+  enviarCountdownPara(l.email, l.nome);
+  Logger.log("Email de teste enviado para " + l.nome + " <" + l.email + "> (Ref. " + l.ref + ").");
+}
+
+function enviarCountdownTodos() {
+  const props = PropertiesService.getScriptProperties();
+  const chave = "COUNTDOWN_ENVIADOS_" + Utilities.formatDate(new Date(), "Europe/Lisbon", "yyyyMMdd");
+  const ja = new Set(String(props.getProperty(chave) || "").split("\n").filter(String));
+  let ok = 0, falhas = [];
+  const vistos = new Set();
+  for (const l of linhasInscritos()) {
+    const mail = l.email.toLowerCase();
+    if (vistos.has(mail) || ja.has(mail)) continue;
+    vistos.add(mail);
+    try {
+      enviarCountdownPara(l.email, l.nome);
+      ja.add(mail); ok++;
+      props.setProperty(chave, Array.from(ja).join("\n"));
+      Utilities.sleep(1500);
+    } catch (err) {
+      falhas.push(l.email + ": " + err);
+      if (String(err).indexOf("Limite diário") !== -1) break;
+    }
+  }
+  Logger.log("Enviados agora: " + ok + ". Já tinham recebido hoje: " + (ja.size - ok) + "." + (falhas.length ? "\nFalhas:\n" + falhas.join("\n") : ""));
+}
