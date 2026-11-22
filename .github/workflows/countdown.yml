@@ -1,0 +1,26 @@
+name: Email countdown
+on:
+  push:
+    paths: ["countdown/pedido.json"]
+permissions:
+  contents: write
+concurrency: inscricoes
+jobs:
+  enviar:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with: {ref: main}
+      - uses: actions/setup-python@v5
+        with: {python-version: "3.12"}
+      - run: pip install msoffcrypto-tool openpyxl cryptography
+      - run: python scripts/countdown.py
+        env:
+          RSA_PRIVATE_KEY: ${{ secrets.RSA_PRIVATE_KEY }}
+          XLSX_PASSWORD: ${{ secrets.XLSX_PASSWORD }}
+      - name: Guardar resultado
+        if: always()
+        run: |
+          git config user.name "inscricoes-bot"; git config user.email "bot@users.noreply.github.com"
+          git add countdown/resultado.txt countdown/enviados.txt 2>/dev/null || true
+          git diff --cached --quiet || (git commit -m "Countdown: resultado" && git pull --rebase -q origin main && git push)
