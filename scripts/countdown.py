@@ -43,6 +43,17 @@ def main():
            f"Linhas no Excel: {len(rows)}", f"Emails únicos válidos: {len(dest)}",
            f"Excluídos (refs {', '.join(sorted(excluir_refs)) or '-'}): {excluidos}", f"Repetidos: {repetidos}",
            f"Sem email válido: {invalidos}", f"Já tinham recebido antes: {len(dest) - len(pendentes)}", f"Por enviar: {len(pendentes)}"]
+    if modo == "almoco":
+        from collections import Counter
+        val = lambda r: str(r[9] if len(r) > 9 and r[9] is not None else "").strip()
+        valores = Counter(val(r) or "(vazio)" for r in rows)
+        sim = [r for r in rows if val(r).lower() in ("sim", "s", "yes", "true")]
+        sim_unicos = {str(r[3] or "").strip().lower() for r in sim}
+        sim_sem_teste = sim_unicos - excluir_mails
+        res = [f"Data (Lisboa): {hoje}", "Modo: almoco", f"Linhas no Excel: {len(rows)}",
+               "Valores na coluna Almoço: " + ", ".join(f"{k}={v}" for k, v in valores.most_common()),
+               f"Linhas com almoço Sim: {len(sim)}", f"Pessoas únicas (por email) com Sim: {len(sim_unicos)}",
+               f"Únicas com Sim sem o email de teste ({', '.join(sorted(excluir_refs)) or '-'}): {len(sim_sem_teste)}"]
     if modo == "enviar":
         if dias < 1: sys.exit("A conferência já começou.")
         html0, txt0 = open("countdown/email.html").read(), open("countdown/email.txt").read()
