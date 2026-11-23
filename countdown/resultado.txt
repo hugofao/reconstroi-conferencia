@@ -4,4 +4,6 @@ Linhas no Excel: 139
 Valores na coluna Almoço: Sim=101, Não=29, (vazio)=9
 Linhas com almoço Sim: 101
 Pessoas únicas (por email) com Sim: 56
+Linhas com Sim sem o email de teste: 82
+Pessoas únicas (nome + email) com Sim, sem o email de teste: 82
 Únicas com Sim sem o email de teste (E94UD4): 55
