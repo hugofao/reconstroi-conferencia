@@ -53,6 +53,8 @@ def main():
         res = [f"Data (Lisboa): {hoje}", "Modo: almoco", f"Linhas no Excel: {len(rows)}",
                "Valores na coluna Almoço: " + ", ".join(f"{k}={v}" for k, v in valores.most_common()),
                f"Linhas com almoço Sim: {len(sim)}", f"Pessoas únicas (por email) com Sim: {len(sim_unicos)}",
+               f"Linhas com Sim sem o email de teste: {sum(1 for r in sim if str(r[3] or '').strip().lower() not in excluir_mails)}",
+               f"Pessoas únicas (nome + email) com Sim, sem o email de teste: {len({(' '.join(str(r[2] or '').lower().split()), str(r[3] or '').strip().lower()) for r in sim if str(r[3] or '').strip().lower() not in excluir_mails})}",
                f"Únicas com Sim sem o email de teste ({', '.join(sorted(excluir_refs)) or '-'}): {len(sim_sem_teste)}"]
     if modo == "enviar":
         if dias < 1: sys.exit("A conferência já começou.")
