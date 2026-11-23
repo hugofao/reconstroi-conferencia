@@ -1,9 +1,7 @@
-Data (Lisboa): 2026-11-22 | Faltam 6 dias
-Modo: simular
-Linhas no Excel: 131
-Emails únicos válidos: 82
-Excluídos (refs E94UD4): 20
-Repetidos: 29
-Sem email válido: 0
-Já tinham recebido antes: 82
-Por enviar: 0
+Data (Lisboa): 2026-11-23
+Modo: almoco
+Linhas no Excel: 139
+Valores na coluna Almoço: Sim=101, Não=29, (vazio)=9
+Linhas com almoço Sim: 101
+Pessoas únicas (por email) com Sim: 56
+Únicas com Sim sem o email de teste (E94UD4): 55
