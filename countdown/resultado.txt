@@ -1,12 +1,11 @@
 Data (Lisboa): 2026-11-27 | Falta 1 dia
-Modo: teste | Campanha: dia
-Linhas no Excel: 154
-Emails únicos válidos: 93
+Modo: enviar | Campanha: dia
+Linhas no Excel: 155
+Emails únicos válidos: 94
 Excluídos (refs E94UD4): 29
 Repetidos: 32
 Sem email válido: 0
 Já tinham recebido antes: 0
-Por enviar: 93
-Teste: endereço de teste encontrado no Excel
-Enviados agora: 1
+Por enviar: 94
+Enviados agora: 94
 Falhas: 0
