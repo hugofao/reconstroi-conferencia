@@ -1,9 +1,12 @@
-Data (Lisboa): 2026-11-23
-Modo: almoco
-Linhas no Excel: 139
-Valores na coluna Almoço: Sim=101, Não=29, (vazio)=9
-Linhas com almoço Sim: 101
-Pessoas únicas (por email) com Sim: 56
-Linhas com Sim sem o email de teste: 82
-Pessoas únicas (nome + email) com Sim, sem o email de teste: 82
-Únicas com Sim sem o email de teste (E94UD4): 55
+Data (Lisboa): 2026-11-27 | Falta 1 dia
+Modo: teste | Campanha: dia
+Linhas no Excel: 154
+Emails únicos válidos: 93
+Excluídos (refs E94UD4): 29
+Repetidos: 32
+Sem email válido: 0
+Já tinham recebido antes: 0
+Por enviar: 93
+Teste: endereço de teste encontrado no Excel
+Enviados agora: 1
+Falhas: 0
