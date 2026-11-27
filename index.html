@@ -133,31 +133,10 @@ footer a{color:var(--mut)}
 
 <section id="inscricao"><div class="w">
   <h2>Inscrição</h2>
-  <p class="lead">Garante o teu lugar e “[RE]CONSTRÓI” a obra e inscreve-te já!</p>
-  <form id="f" novalidate>
-    <label for="name">Nome completo *</label><input type="text" id="name" required maxlength="120" autocomplete="name">
-    <div class="row">
-      <div><label for="email">Email *</label><input type="email" id="email" required maxlength="120" autocomplete="email"></div>
-      <div><label for="phone">Telemóvel</label><input type="tel" id="phone" maxlength="11" inputmode="numeric" autocomplete="tel" placeholder="9XXXXXXXX"></div>
-    </div>
-    <div class="row">
-      <div><label for="age">Idade *</label><input type="text" id="age" required inputmode="numeric" pattern="[0-9]*" maxlength="3" autocomplete="off"></div>
-      <div><label for="church">Igreja / comunidade</label><input type="text" id="church" maxlength="120"></div>
-    </div>
-    <div class="lunch"><h3>Almoço de sábado 🥪</h3>
-      <label class="chk" style="margin-top:10px"><input type="checkbox" id="lunch"> <span>Quero reservar almoço</span></label>
-      <p style="margin-top:12px"><b style="color:var(--or)">"Bifana do Trolha"</b> (bifana no pão, batatas, bebida e café.) – <b>Custo 5 €</b></p>
-      <ul class="pay"><li>Fazer o pagamento em avanço por transferência bancária para o IBAN <b>PT50356000019001892861742</b> (enviar comprovativo para <a href="mailto:reconstroi.adb@gmail.com">reconstroi.adb@gmail.com</a>).</li></ul>
-      <p class="note"><b>Nota:</b> existe um limite de 100 refeições e só garantimos com comprovativo de pagamento.</p></div>
-    <div class="lunch"><h3>Celebração e Encerramento Domingo</h3>
-      <label class="chk" style="margin-top:10px"><input type="checkbox" id="sunday"> <span>Quero participar</span></label></div>
-    <label for="notes">Observações <small>(Opcional)</small></label>
-    <textarea id="notes" rows="3" maxlength="400"></textarea>
-    <input class="hp" type="text" id="website" tabindex="-1" autocomplete="off" aria-hidden="true">
-    <label class="chk"><input type="checkbox" id="rgpd" required> <span>Autorizo o tratamento dos meus dados pessoais (nome, contactos, idade) exclusivamente para a organização da conferência [re]constrói. *</span></label>
-    <p style="margin:20px 0 0"><button class="btn" id="go" type="submit">Confirmar inscrição</button></p>
-    <div id="msg" role="status" aria-live="polite"></div>
-  </form>
+  <div class="card" style="max-width:640px">
+    <h3>As inscrições estão encerradas</h3>
+    <p>Obrigado a todos os que se inscreveram. Até já na <b>[RE]CONSTRÓI</b>! 🧱</p>
+  </div>
 </div></section>
 
 <section id="onde"><div class="w">
@@ -171,62 +150,6 @@ footer a{color:var(--mut)}
 document.querySelectorAll(".tab").forEach(t=>t.addEventListener("click",()=>{
   document.querySelectorAll(".tab").forEach(x=>{const on=x===t;x.classList.toggle("on",on);x.setAttribute("aria-selected",on);document.getElementById(x.getAttribute("aria-controls")).hidden=!on});
 }));
-</script>
-<script>
-const SHEETS="https://script.google.com/macros/s/AKfycbyTz-Wx7ndbv2eiX3I0xj_AO2oMhmGSDbADZbEWAa8U0L7KKX9JQqIxUlznyryFtcIS/exec";
-const WORKER="https://reconstroi-conferencia.hugofao.workers.dev/";
-const PUB={"kty": "RSA", "alg": "RSA-OAEP-256", "e": "AQAB", "n": "mKsqgT-U1ap5HX9Ad6EZGSXUHMTxbVD72sUxKoFwNqNPVsQDzX_bu4t9sUmOmSiSSrcqVTZo3uYGslIPgnRgl1T9Gmt_kuF7AoT56itm_xNb4V90coCoOECm5Xk9WKxgEXWZvLTxDSF_cGFpqmhNlaa9Cz_LCyzMBTRqWVD0qgM6xYBTZZv05qg1QB1dGMUWnRYS0x3sNzmRnzxi9roQoJZRI0cq0E-pzY5R6QXs-Um4fwZDLM2ahkNXpZcClvxO1kib7C8A-D4J84pKyL0j2UZ5SJLUZd3MH2jjdYTG_PmHHTxSzJf4DkJAQAGVhMZjItFFD-JFw1ELF0EocCiuyQ", "ext": true}, TOPIC="reconstroi-b9eaf7b17932dcd721ba53a6";
-const $=id=>document.getElementById(id), b64=u=>btoa(String.fromCharCode(...new Uint8Array(u)));
-async function seal(obj){
-  const pub=await crypto.subtle.importKey("jwk",PUB,{name:"RSA-OAEP",hash:"SHA-256"},false,["encrypt"]);
-  const ak=await crypto.subtle.generateKey({name:"AES-GCM",length:256},true,["encrypt"]);
-  const iv=crypto.getRandomValues(new Uint8Array(12));
-  const d=await crypto.subtle.encrypt({name:"AES-GCM",iv},ak,new TextEncoder().encode(JSON.stringify(obj)));
-  const k=await crypto.subtle.encrypt({name:"RSA-OAEP"},pub,await crypto.subtle.exportKey("raw",ak));
-  return btoa(JSON.stringify({k:b64(k),iv:b64(iv),d:b64(d)}));
-}
-function show(t,c){const m=$("msg");m.textContent=t;m.className=c}
-$("f").addEventListener("submit",async e=>{
-  e.preventDefault();
-  if($("website").value) return;                       // honeypot
-  const erros=[]; // [campo, mensagem]
-  document.querySelectorAll(".bad").forEach(x=>x.classList.remove("bad"));
-  const nome=$("name").value.trim(), email=$("email").value.trim(), idade=$("age").value.trim();
-  const tel=$("phone").value.replace(/\s+/g,"");$("phone").value=tel;
-  if(!nome) erros.push(["name","Nome: está vazio."]);
-  if(!email) erros.push(["email","Email: está vazio."]);
-  else if(!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)) erros.push(["email","Email: formato inválido (exemplo: nome@exemplo.pt)."]);
-  if(!idade) erros.push(["age","Idade: está vazia."]);
-  else if(!/^\d{1,3}$/.test(idade)) erros.push(["age","Idade: formato inválido, usa só números (exemplo: 35)."]);
-  if(tel&&!/^9\d{8}$/.test(tel)) erros.push(["phone","Telemóvel: formato inválido, deve ter 9 dígitos e começar por 9 (exemplo: 912345678)."]);
-  if(!$("rgpd").checked) erros.push(["rgpd","Autorização de dados: marca a caixa no fim do formulário."]);
-  if(erros.length){
-    erros.forEach(([id])=>{const el=$(id);(el.closest("div")||el).classList.add("bad");el.classList.add("bad")});
-    $("msg").innerHTML="";const ul=document.createElement("ul");ul.style.cssText="margin:0;padding-left:18px";
-    erros.forEach(([,m])=>{const li=document.createElement("li");li.textContent=m;ul.appendChild(li)});
-    $("msg").appendChild(ul);$("msg").className="err";$(erros[0][0]).focus();return}
-  const btn=$("go");btn.disabled=true;btn.textContent="A enviar…";
-  try{
-    const id=Array.from(crypto.getRandomValues(new Uint8Array(6)),x=>"23456789ABCDEFGHJKMNPQRSTUVWXYZ"[x%31]).join("");
-    const data={id,ts:Date.now()};
-    ["name","email","phone","age","church","notes"].forEach(k=>data[k]=$(k).value.trim());data.sunday=$("sunday").checked?"Sim":"Não";data.lunch=$("lunch").checked?"Sim":"Não";
-    // envia sempre para as duas vias: folha Google (tempo real) e cópia cifrada de segurança
-    // as duas vias correm em paralelo, cada uma com limite de tempo, para o botão nunca ficar preso
-    const post=(url,opts,ms)=>{const c=new AbortController(),t=setTimeout(()=>c.abort(),ms);return fetch(url,{method:"POST",keepalive:true,signal:c.signal,...opts}).finally(()=>clearTimeout(t))};
-    const viaSheets=SHEETS?post(SHEETS,{mode:"no-cors",headers:{"Content-Type":"text/plain;charset=utf-8"},body:JSON.stringify(data)},12000).then(()=>true,()=>false):Promise.resolve(false);
-    const viaBackup=(async()=>{
-      const sealed=await seal(data);
-      if(WORKER&&!WORKER.startsWith("__")){try{if((await post(WORKER,{body:sealed},12000)).ok)return true}catch(_){}}
-      try{return (await post("https://ntfy.sh/"+TOPIC,{body:sealed},12000)).ok}catch(_){return false}
-    })().catch(()=>false);
-    // confirma logo que UMA das vias responde (a outra continua em segundo plano, keepalive); só falha se ambas falharem
-    const ok=await new Promise(res=>{let n=0,feito=false;[viaSheets,viaBackup].forEach(p=>p.then(v=>{if(v&&!feito){feito=true;res(true)}if(++n===2&&!feito)res(false)}))});
-    if(!ok) throw 0;
-    $("f").reset();
-    show("Inscrição recebida! Referência "+id.toUpperCase()+". Vais receber um email de confirmação em alguns minutos (verifica também a pasta de Spam). Até 28 de Novembro. 🧱","ok");
-  }catch(_){show("Não foi possível enviar. Tenta novamente dentro de instantes.","err")}
-  btn.disabled=false;btn.textContent="Confirmar inscrição";
-});
 </script>
 </body>
 </html>
