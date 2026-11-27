@@ -22,5 +22,5 @@ jobs:
         if: always()
         run: |
           git config user.name "inscricoes-bot"; git config user.email "bot@users.noreply.github.com"
-          for f in countdown/resultado.txt countdown/enviados.txt; do [ -f "$f" ] && git add "$f"; done; [ -f countdown/resultado.txt ] && cat countdown/resultado.txt >> "$GITHUB_STEP_SUMMARY"
+          for f in countdown/resultado.txt countdown/enviados.txt countdown/enviados-dia.txt; do [ -f "$f" ] && git add "$f"; done; [ -f countdown/resultado.txt ] && cat countdown/resultado.txt >> "$GITHUB_STEP_SUMMARY"
           git diff --cached --quiet || (git commit -m "Countdown: resultado" && git pull --rebase -q origin main && git push)
